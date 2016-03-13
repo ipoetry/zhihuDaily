@@ -1,0 +1,30 @@
+﻿<UserControl
+    x:Class="zhihuDaily.PageHeader"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:zhihuDaily"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    VerticalAlignment="Top"
+    VerticalContentAlignment="Top"
+    HorizontalAlignment="Stretch"
+    HorizontalContentAlignment="Stretch"
+    Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
+    Height="48"
+    xmlns:effects="using:zhihuDaily.Design"
+    d:DesignHeight="100"
+    d:DesignWidth="400">
+
+    <Grid x:Name="grid" Background="#008BED">
+        <!--<effects:Shadow >-->
+            <Grid x:Name="titleBar" >              
+            <ContentPresenter x:Name="content"                            
+                                VerticalAlignment="{x:Bind VerticalContentAlignment}"
+                                HorizontalAlignment="{x:Bind HorizontalContentAlignment}"
+                                Margin="{x:Bind Padding}"
+                                Content="{x:Bind HeaderContent}"/>        
+            </Grid>
+        <!--</effects:Shadow>-->
+    </Grid>
+</UserControl>

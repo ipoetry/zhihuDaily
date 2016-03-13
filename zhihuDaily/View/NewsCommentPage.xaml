@@ -1,0 +1,236 @@
+﻿<Page
+    x:Class="zhihuDaily.NewsCommentPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:zhihuDaily"
+    xmlns:Converter="using:zhihuDaily.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    
+    <Page.Resources>
+        <Converter:TotalCommentsFormat x:Key="totalCommentsFormat"></Converter:TotalCommentsFormat>
+        <Converter:TimeFormat x:Key="timeFormat"></Converter:TimeFormat>
+    </Page.Resources>
+    <Grid Name="mainContaier" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <local:PageHeader>
+            <local:PageHeader.HeaderContent>
+                <TextBlock  Foreground="White" x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" VerticalAlignment="Center"  Margin="48,14,0,0" Text="评论"/>
+            </local:PageHeader.HeaderContent>
+        </local:PageHeader>
+        <Pivot Grid.Row="1" SelectionChanged="Pivot_SelectionChanged" Name="pivot_Main">
+            <PivotItem Tag="long">
+                <PivotItem.Header>
+                    <RelativePanel>
+                        <TextBlock Name="txtbLongCommentTitle"
+                                   Text="长评论"
+                                   FontSize="16">
+
+                        </TextBlock>
+                        <TextBlock RelativePanel.RightOf="txtbLongCommentTitle"
+                                   RelativePanel.AlignTopWith="txtbLongCommentTitle"
+                                   Text="{Binding TotalLongComments}"
+                                   Margin="2,0,0,0"
+                                   FontSize="11" Foreground="#008BED">
+
+                        </TextBlock>
+                    </RelativePanel>
+                </PivotItem.Header>
+                <ListView SelectionMode="None" ItemsSource="{Binding LongComments}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                    <RowDefinition Height="auto"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <Image
+                                       Width="30"
+                                       Height="30"
+                                       Margin="0,8,5,0"
+                                       Source="{Binding Avatar}">
+                                        </Image>
+                                    </StackPanel>
+                                    <Grid Grid.Column="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"></RowDefinition>
+                                            <RowDefinition Height="*"></RowDefinition>
+                                            <RowDefinition Height="auto"></RowDefinition>
+                                            <RowDefinition Height="auto"></RowDefinition>
+                                        </Grid.RowDefinitions>
+                                        <RelativePanel Grid.Row="0" Margin="0,3,0,3">
+                                            <TextBlock RelativePanel.AlignLeftWithPanel="True"
+                                                   FontSize="14"
+                                                   FontWeight="Bold"
+                                                   Text="{Binding Author}">
+
+                                            </TextBlock>
+                                            <StackPanel RelativePanel.AlignRightWithPanel="True"
+                                                    Orientation="Horizontal">
+                                                <!--<TextBlock Text="&#xE19F;"
+                                                   VerticalAlignment="Center"
+                                                   FontFamily="Segoe MDL2 Assets"
+                                                   FontSize="14">
+
+                                                </TextBlock>-->
+
+                                                <TextBlock Text="{Binding Likes}" 
+                                                   VerticalAlignment="Center"
+                                                   Margin="5,0,0,0"
+                                                   FontSize="14">
+                                                </TextBlock>
+                                                <TextBlock Text=" 赞"
+                                                   VerticalAlignment="Center"
+                                                   FontFamily="微软雅黑"
+                                                   FontSize="13">
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </RelativePanel>
+                                        <TextBlock Grid.Row="1"
+                                             HorizontalAlignment="Stretch"
+                                             Padding="0,5,0,5"
+                                             FontSize="14"
+                                             TextWrapping="Wrap"
+                                             Text="{Binding ShowContent}">
+
+                                        </TextBlock>
+                                        <TextBlock Grid.Row="2"
+                                           Text="{Binding Path=Time,Converter={StaticResource timeFormat}}"
+                                           FontSize="12"
+                                           Margin="0,0,0,5"
+                                           Foreground="Gray">
+                                        </TextBlock>
+                                        <Rectangle Fill="#FFEEE9E9"
+                                           Height="0.1"
+                                           Grid.Row="3">
+
+                                        </Rectangle>
+                                    </Grid>
+                                </Grid>
+                                <Line X1="10" StrokeThickness="0.5" Margin="0 7 0 0" Stretch="UniformToFill" Stroke="LightGray" Grid.Row="1"></Line>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+            </PivotItem>
+            <PivotItem Tag="short">
+                <PivotItem.Header>
+                    <RelativePanel>
+                        <TextBlock Name="txtbShortCommentTitle"
+                                   Text="短评论"
+                                   FontSize="16">
+                        </TextBlock>
+                        <TextBlock RelativePanel.RightOf="txtbShortCommentTitle"
+                                   RelativePanel.AlignTopWith="txtbShortCommentTitle"
+                                   Text="{Binding TotalShortComments}"
+                                   Margin="2,0,0,0"
+                                   FontSize="11" Foreground="#008BED">
+
+                        </TextBlock>
+                    </RelativePanel>
+                </PivotItem.Header>
+                <ListView SelectionMode="None" ItemsSource="{Binding ShortComments}" >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                    <RowDefinition Height="auto"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <Image 
+                                       Width="30"
+                                       Height="30"
+                                       Margin="0,8,5,0"
+                                       Source="{Binding Avatar}">
+                                        </Image>
+                                    </StackPanel>
+                                    <Grid Grid.Column="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"></RowDefinition>
+                                            <RowDefinition Height="*"></RowDefinition>
+                                            <RowDefinition Height="auto"></RowDefinition>
+                                            <RowDefinition Height="auto"></RowDefinition>
+                                        </Grid.RowDefinitions>
+                                        <RelativePanel Grid.Row="0" Margin="0,3,0,0">
+                                            <TextBlock RelativePanel.AlignLeftWithPanel="True"
+                                               FontSize="14"
+                                               FontWeight="Bold"
+                                               Text="{Binding Author}">
+
+                                            </TextBlock>
+                                            <StackPanel RelativePanel.AlignRightWithPanel="True"
+                                                Orientation="Horizontal">
+                                                <!--<TextBlock Text="&#xE19F;"
+                                                   VerticalAlignment="Center"
+                                                   FontFamily="Segoe MDL2 Assets"
+                                                   FontSize="14">
+
+                                                </TextBlock>-->
+                                                <TextBlock Text="{Binding Likes}" 
+                                                   VerticalAlignment="Center"
+                                                   Margin="5,0,0,0"
+                                                   FontSize="14">
+                                                </TextBlock>
+                                                <TextBlock Text=" 赞"
+                                                   VerticalAlignment="Center"
+                                                    FontFamily="微软雅黑"
+                                                   FontSize="13">
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </RelativePanel>
+                                        <TextBlock Grid.Row="1"
+                                           HorizontalAlignment="Stretch"
+                                           Padding="0,5,0,5"
+                                           FontSize="14"
+                                           TextWrapping="Wrap"
+                                           Text="{Binding ShowContent}">
+
+                                        </TextBlock>
+                                        <TextBlock Grid.Row="2"
+                                           Text="{Binding Path=Time,Converter={StaticResource timeFormat}}"
+                                           FontSize="12"
+                                           Margin="0,0,0,5"
+                                           Foreground="Gray">
+                                        </TextBlock>
+                                        <Rectangle Fill="#FFEEE9E9"
+                                           Height="0.1"
+                                           Grid.Row="3">
+
+                                        </Rectangle>
+                                    </Grid>
+                                </Grid>
+                                <Line X1="10" StrokeThickness="0.5" Margin="0 7 0 0" Stretch="UniformToFill" Stroke="LightGray" Grid.Row="1"></Line>
+                            </Grid>
+                        </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+            </PivotItem>
+        </Pivot>
+    </Grid>
+</Page>

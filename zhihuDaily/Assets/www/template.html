@@ -1,0 +1,35 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no">
+    <link href="ms-appx-web:///Assets/www/news_qa.auto.css" rel="stylesheet">
+    <link href="ms-appx-web:///Assets/www/news_header.css" rel="stylesheet">
+    <script src="ms-appx-web:///Assets/www/img_replace.js"></script>
+    <script src="ms-appx-web:///Assets/www/night.js"></script>
+    <!--<script src="ms-appx-web:///Assets/www/gesture.js"></script>-->
+    <script src="ms-appx-web:///Assets/www/hammer.min.js" type="text/javascript"></script>
+    <!--<script  type="text/javascript">
+        var target = document.body;
+        prepareTarget(target, eventListener);
+    </script>-->
+</head>
+<body onload="set_night_mode({nightTheme});">{content}
+    <script type="text/javascript">
+        // 初始化监听对象，并监听 html。
+        var hammertime = new Hammer(document.getElementsByTagName("html")[0]);
+        hammertime.on("swipeleft", function (e) {
+            if (e.pointerType !== "mouse") {
+                // 左滑，前进。
+                window.external.notify("goforward");
+            }
+        });
+        hammertime.on("swiperight", function (e) {
+            if (e.pointerType !== "mouse") {
+                // 右滑，后退。
+                window.external.notify("goback");
+            }
+        });
+    </script>
+</body>
+</html>

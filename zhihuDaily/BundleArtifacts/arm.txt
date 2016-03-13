@@ -1,0 +1,1 @@
+MainPackage=F:\@Self_Progect\1030\zhihuDaily\zhihuDaily\bin\ARM\Debug\zhihuDaily_1.0.1.0_ARM_Debug.appx

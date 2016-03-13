@@ -1,0 +1,349 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{36BA3711-12F0-4C77-8DFC-845C53EC63CA}</ProjectGuid>
+    <OutputType>AppContainerExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>zhihuDaily</RootNamespace>
+    <AssemblyName>zhihuDaily</AssemblyName>
+    <DefaultLanguage>zh-CN</DefaultLanguage>
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetPlatformVersion>10.0.10240.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+    <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
+    <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <PackageCertificateKeyFile>zhihuDaily_StoreKey.pfx</PackageCertificateKeyFile>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <AppxBundle>Never</AppxBundle>
+    <AppxBundlePlatforms>arm</AppxBundlePlatforms>
+    <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
+    <PackageCertificateThumbprint>DE70E59BE63CC2B522EE28FB8CE5B68D8E1847C2</PackageCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <None Include="project.json" />
+    <None Include="zhihuDaily_StoreKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AppShell.xaml.cs">
+      <DependentUpon>AppShell.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CacheHelper\CacheableImage.xaml.cs">
+      <DependentUpon>CacheableImage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CustomToast.cs" />
+    <Compile Include="Controls\CustomToast1.cs" />
+    <Compile Include="Controls\CustomToast_QQ.cs" />
+    <Compile Include="Controls\OpenMenuFlyoutAction.cs" />
+    <Compile Include="Controls\ToastBox.xaml.cs">
+      <DependentUpon>ToastBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ToastPrompt.cs" />
+    <Compile Include="Converters\BoolVisibilityConverter.cs" />
+    <Compile Include="Converters\DateStyleConverter.cs" />
+    <Compile Include="Converters\NumberConveter.cs" />
+    <Compile Include="Converters\LightModeConverter.cs" />
+    <Compile Include="Converters\NullableBooleanToBoolean.cs" />
+    <Compile Include="Converters\VisibilityConverter.cs" />
+    <Compile Include="Converters\WidthConverter.cs" />
+    <Compile Include="DataService\CommonService.cs" />
+    <Compile Include="DataService\DownloadHelper.cs" />
+    <Compile Include="DataService\EncryptUtils.cs" />
+    <Compile Include="DataService\Functions.cs" />
+    <Compile Include="DataService\ICommonService.cs" />
+    <Compile Include="DataService\JsonConvertHelper.cs" />
+    <Compile Include="DataService\LiveTileUtils.cs" />
+    <Compile Include="DataService\NetWorkHelper.cs" />
+    <Compile Include="DataService\NewsImageDowloader.cs" />
+    <Compile Include="DataService\OfflineNewsDownloader.cs" />
+    <Compile Include="DataService\ServceBase.cs" />
+    <Compile Include="DataService\StringEncodeUtils.cs" />
+    <Compile Include="Design\Shadow.cs" />
+    <Compile Include="Extensions\ColorExtension.cs" />
+    <Compile Include="CacheHelper\ImageCache.cs" />
+    <Compile Include="Converters\CacheImageValueConverter.cs" />
+    <Compile Include="ViewModel\CommentDataSource.cs" />
+    <Compile Include="ViewModel\CommentIncrementalLoading.cs" />
+    <Compile Include="ViewModel\NewsCommentViewMode.cs" />
+    <Compile Include="ViewModel\ThemeBeforeDataSource.cs" />
+    <Compile Include="View\NewsCommentPage.xaml.cs">
+      <DependentUpon>NewsCommentPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\AsyncLock.cs" />
+    <Compile Include="Extensions\AsyncSemaphore.cs" />
+    <Compile Include="Extensions\IStorageHelper.cs" />
+    <Compile Include="Extensions\StorageHelper.cs" />
+    <Compile Include="CacheHelper\TaskCompletionNotifier.cs" />
+    <Compile Include="View\HomePage.xaml.cs">
+      <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ItemClickCommand.cs" />
+    <Compile Include="Model\AppSettings.cs" />
+    <Compile Include="Model\Comments.cs" />
+    <Compile Include="Model\HotNews.cs" />
+    <Compile Include="Model\LatestNews.cs" />
+    <Compile Include="Model\NavigationArgs.cs" />
+    <Compile Include="Model\NewsContent.cs" />
+    <Compile Include="Model\NotificationObject.cs" />
+    <Compile Include="Model\PackageInfo.cs" />
+    <Compile Include="Model\StartImage.cs" />
+    <Compile Include="Model\StoryExtra.cs" />
+    <Compile Include="Model\Theme.cs" />
+    <Compile Include="Model\Themes.cs" />
+    <Compile Include="Model\Theme_Style.cs" />
+    <Compile Include="Controls\PageHeader.xaml.cs">
+      <DependentUpon>PageHeader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\NewsCollectionViewMode.cs" />
+    <Compile Include="View\NewsCollectionPage.xaml.cs">
+      <DependentUpon>NewsCollectionPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewsContentPage.xaml.cs">
+      <DependentUpon>NewsContentPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View\SettingPage.xaml.cs">
+      <DependentUpon>SettingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\AppShellViewModel.cs" />
+    <Compile Include="ViewModel\DataSourceBase.cs" />
+    <Compile Include="ViewModel\HomePageViewModel.cs" />
+    <Compile Include="ViewModel\IncrementalLoadingBase.cs" />
+    <Compile Include="ViewModel\NewsBeforeDataSource.cs" />
+    <Compile Include="ViewModel\NewsContentViewModel.cs" />
+    <Compile Include="ViewModel\ThemePageViewModel.cs" />
+    <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\ThemePage.xaml.cs">
+      <DependentUpon>ThemePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataService\WebProvider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+    <PRIResource Include="Resources.resw" />
+    <None Include="Win10_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\FunIcon\bg_tips.png" />
+    <Content Include="Assets\FunIcon\collect.png" />
+    <Content Include="Assets\FunIcon\collected.png" />
+    <Content Include="Assets\FunIcon\comment.png" />
+    <Content Include="Assets\FunIcon\comment_vote.png" />
+    <Content Include="Assets\FunIcon\comment_voted.png" />
+    <Content Include="Assets\FunIcon\daily.jpeg" />
+    <Content Include="Assets\FunIcon\home_pic.png" />
+    <Content Include="Assets\FunIcon\ic_logo.png" />
+    <Content Include="Assets\FunIcon\praise.png" />
+    <Content Include="Assets\FunIcon\share.png" />
+    <Content Include="Assets\Images\dark_image_small_default.png" />
+    <Content Include="Assets\FunIcon\download.png" />
+    <Content Include="Assets\FunIcon\ic_launcher.png" />
+    <Content Include="Assets\Images\default_pic_content_image_download_dark.png" />
+    <Content Include="Assets\Images\default_pic_content_image_download_light.png" />
+    <Content Include="Assets\Images\default_pic_content_image_loading_dark.png" />
+    <Content Include="Assets\Images\default_pic_content_image_loading_light.png" />
+    <Content Include="Assets\Images\image_small_default.png" />
+    <Content Include="Assets\FunIcon\menu_home.png" />
+    <Content Include="Assets\www\gesture.js" />
+    <Content Include="Assets\Images\splash.png" />
+    <Content Include="Assets\Images\splash_logo.png" />
+    <Content Include="Assets\StoreLogo.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="Assets\www\hammer.min.js" />
+    <Content Include="Assets\www\img_replace.js" />
+    <Content Include="Assets\www\large-font.js" />
+    <Content Include="Assets\www\news_detail_header_def.jpg" />
+    <Content Include="Assets\www\news_header.css" />
+    <Content Include="Assets\www\news_qa.auto.css" />
+    <Content Include="Assets\www\news_qa.min.css" />
+    <Content Include="Assets\www\night.js" />
+    <Content Include="Assets\www\show_bottom_link.js" />
+    <Content Include="Assets\www\template.html" />
+    <Content Include="Assets\www\video.js" />
+    <Content Include="Assets\www\zepto.min.js" />
+    <None Include="Package.StoreAssociation.xml" />
+    <Content Include="Properties\Default.rd.xml" />
+    <Content Include="Assets\LockScreenLogo.scale-200.png" />
+    <Content Include="Assets\SplashScreen.scale-200.png" />
+    <Content Include="Assets\Square150x150Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="AppShell.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CacheHelper\CacheableImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ToastBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\NewsCommentPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\HomePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PageHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewsCollectionPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewsContentPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\CustomStyleResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\FlatUIColorsResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ThemeResourcesDark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ThemeResourcesLight.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\SettingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ThemePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
+      <Name>BehaviorsXamlSDKManaged</Name>
+    </SDKReference>
+    <SDKReference Include="Microsoft.NET.Native.Runtime.1.1, Version=1.1">
+      <Name>Microsoft .NET Core Runtime Package for Windows</Name>
+    </SDKReference>
+    <SDKReference Include="WindowsMobile, Version=10.0.10240.0">
+      <Name>Windows Mobile Extensions for the UWP %28WindowsMobile, Version=10.0.10240.0%29</Name>
+    </SDKReference>
+    <SDKReference Include="WindowsMobile, Version=10.0.10586.0">
+      <Name>Windows Mobile Extensions for the UWP %28WindowsMobile, Version=10.0.10586.0%29</Name>
+    </SDKReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\BackgroundTaskLibrary\BackgroundTaskLibrary.csproj">
+      <Project>{510812ba-ccac-4e67-af99-dd653b601ada}</Project>
+      <Name>BackgroundTaskLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
+    <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

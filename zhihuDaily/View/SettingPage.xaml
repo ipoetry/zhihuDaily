@@ -1,0 +1,132 @@
+﻿<Page
+    x:Class="zhihuDaily.SettingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:zhihuDaily"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" NavigationCacheMode="Required">
+
+    <Page.Resources>
+        <Style x:Key="SettingPageHyperlinkButtonText" TargetType="HyperlinkButton">
+            <Setter Property="FontFamily" Value="Segoe WP"/>
+            <Setter Property="FontSize" Value="18"/>
+            <!--<Setter Property="Foreground" Value="{ThemeResource CNBlogsThemeColor}"/>-->
+        </Style>
+
+        <Storyboard x:Name="sb_LogoMoveUp">
+            <DoubleAnimation Duration="0:0:0.8"
+                             From="200"
+                             Storyboard.TargetName="image_Logo"
+                             Storyboard.TargetProperty="(UIElement.Projection).(PlaneProjection.GlobalOffsetY)"
+                             To="0" />
+            <DoubleAnimation Duration="0:0:0.8"
+                             From="360"
+                             Storyboard.TargetName="image_Logo"
+                             Storyboard.TargetProperty="(UIElement.Projection).(PlaneProjection.RotationZ)"
+                             To="0" />
+            <DoubleAnimation Duration="0:0:0.8"
+                             From="0"
+                             Storyboard.TargetName="image_Logo"
+                             Storyboard.TargetProperty="Opacity"
+                             To="1" />
+            <DoubleAnimation BeginTime="0:0:0.5"
+                             Duration="0:0:1"
+                             From="0"
+                             Storyboard.TargetName="sp_aboutContent"
+                             Storyboard.TargetProperty="Opacity"
+                             To="1" />
+        </Storyboard>
+    </Page.Resources>
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <local:PageHeader>
+            <local:PageHeader.HeaderContent>
+                <TextBlock  Foreground="White" x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" VerticalAlignment="Center"  Margin="48,14,0,0" Text="设置"/>
+            </local:PageHeader.HeaderContent>
+        </local:PageHeader>
+        <Grid Name="grid_Content"  Grid.Row="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
+            <Pivot SelectionChanged="Pivot_SelectionChanged" Name="pivot_Main">
+                <PivotItem Tag="commonSetting">
+                    <PivotItem.Header>
+                        <TextBlock  Text="通用" />
+                    </PivotItem.Header>
+                    <StackPanel Margin="5,10">
+                        <ToggleSwitch OffContent="关闭" OnContent="开启" Header="无图模式" IsOn="{Binding IsNonePicMode,Mode=TwoWay}" ></ToggleSwitch>
+                        <ToggleSwitch OffContent="关闭" OnContent="开启" Header="动态磁贴" IsOn="{Binding IsUsingTile,Mode=TwoWay}" Name="isUsingTile">
+                            <interactivity:Interaction.Behaviors>
+                                <core:EventTriggerBehavior  EventName="Toggled">
+                                    <core:InvokeCommandAction Command="{Binding ToggledCommand}" CommandParameter="{Binding ElementName=isUsingTile,Path=IsOn}" />
+                                    </core:EventTriggerBehavior>
+                                </interactivity:Interaction.Behaviors>
+                        </ToggleSwitch>
+                        <Line Fill="#666666" Stroke="#666666" Stretch="UniformToFill" X1="10" Margin="0,5,0,0"></Line>
+                        <Grid Margin="0,10" Height="40">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="当前缓存：" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                            <TextBlock Grid.Column="1" Margin="-30,0,0,0" Name="CacheSizeShow" Text="{Binding CacheSize}" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                            <Button Grid.Column="2" Name="btn_ClearCache" Click="btn_ClearCache_Click" Content="清空缓存" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Left"></Button>
+                        </Grid>
+                        
+                    </StackPanel>
+                </PivotItem>
+                <PivotItem Tag="about">
+                    <PivotItem.Header>
+                        <TextBlock  Text="关于" />
+                    </PivotItem.Header>
+                    <!--<Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Border Padding="5">
+                            <TextBlock TextWrapping="Wrap">
+                                一款仿官方的知乎日报的第三方应用
+                            </TextBlock>
+                        </Border>
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                        <Button Content="评价应用" HorizontalAlignment="Center"></Button>
+                            <Button Grid.Column="1" Content="意见反馈" HorizontalAlignment="Center"></Button>
+                        </Grid>
+                    </Grid>-->
+
+                    <StackPanel Margin="20" HorizontalAlignment="Center">
+                        <Image x:Name="image_Logo" Height="100" Margin="0,20" Source="ms-appx:///Assets/FunIcon/daily.jpeg" >
+                            <Image.Projection>
+                                <PlaneProjection />
+                            </Image.Projection>
+                        </Image>
+                        <StackPanel x:Name="sp_aboutContent" >
+                            <TextBlock Margin="0,10" HorizontalAlignment="Center" Text="知乎日报" />
+                            <TextBlock HorizontalAlignment="Center" Text="一款第三方App" FontSize="16"/>
+                            <TextBlock x:Name="tb_Version" Text="{Binding CurrentVersion}" Margin="0,10" HorizontalAlignment="Center" FontSize="14" />
+                            <!--<Image Source="ms-appx:///Assets/ms-uap.jpg" Width="80" Height="80" HorizontalAlignment="Center" Margin="0,10"/>-->
+                            <HyperlinkButton x:Name="btn_RateMe" Margin="0,40,0,10" Content="给个好评" Style="{StaticResource SettingPageHyperlinkButtonText}" HorizontalAlignment="Center" Click="btn_RateMe_Click"/>
+                            <HyperlinkButton x:Name="btn_FeedBack" Margin="0,0,0,10" Content="意见反馈【Email】" Style="{StaticResource SettingPageHyperlinkButtonText}"   HorizontalAlignment="Center" Click="btn_FeedBack_Click"/>
+                            <!--<TextBlock Margin="30" FontSize="14" FontFamily="Segoe WP" TextWrapping="Wrap" >
+                            <Run x:Uid="SettingsFlyout_About_Text4"/>
+                            <Run x:Uid="SettingsFlyout_About_Text5"/>
+                            </TextBlock>-->
+
+                        </StackPanel>
+                    </StackPanel>
+
+                </PivotItem>
+            </Pivot>
+        </Grid>
+    </Grid>
+</Page>
