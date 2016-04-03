@@ -1,0 +1,53 @@
+﻿<UserControl
+    x:Class="zhihuDaily.Controls.MessagePopupWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:zhihuDaily.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="300">
+
+    <Grid>
+        <Border x:Name="OutBorder" Background="#55000000" 
+                VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+
+        <StackPanel x:Name="ContentGrid" Background="White" 
+              Orientation="Vertical" Margin="70,45"
+              VerticalAlignment="Center">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock x:Name="tbTitle" Grid.Row="0" Foreground="#008BED" Margin="20,10" Text="举报"/>
+                <Line X1="100" Grid.Row="1" Stroke="#008BED" Stretch="Fill" StrokeThickness="1.5"></Line>
+                <TextBlock x:Name="tbContent" Grid.Row="2" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="20,10" Text="太好了 我们一起净化评论区"/>
+            </Grid>
+            <Line X1="10" Stretch="Fill" Stroke="#666" StrokeThickness="0.5"></Line>
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" x:Name="btnLeft" Background="White" Tapped="btnLeft_Tapped">
+                    <TextBlock  
+                        Text="取消" FontSize="12" Margin="0,10"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+                </Border>
+
+                <Line Y1="10" Grid.Column="1" Stretch="Fill" Stroke="#666" StrokeThickness="0.5"></Line>
+                <Border Grid.Column="2" x:Name="btnRight" Background="White" Tapped="btnRight_Tapped" >
+                    <TextBlock 
+                    Text="确认举报" FontSize="12"   
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"/>
+                </Border>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</UserControl>

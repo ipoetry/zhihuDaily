@@ -36,7 +36,7 @@ namespace zhihuDaily.Converters
             //}
             var image = value;
             if(image != null)
-            {
+            {              
                 var task = Task.Run(async () =>
                 {
                     var cache = await ImageCache.CreateInstance();

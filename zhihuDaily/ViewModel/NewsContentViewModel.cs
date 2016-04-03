@@ -107,7 +107,7 @@ namespace zhihuDaily.ViewModel
                     //Delay to destroy animation
                                      
                     ICommonService<StoryExtra> storyExtraService = new CommonService<StoryExtra>();
-                    this.StoryExtra  = await storyExtraService.GetObjectAsync("story-extra", id);
+                    this.StoryExtra  = await storyExtraService.GetNotAvailableCacheObjAsync("story-extra", id);
                 
                     this.IsActive = false;
                     

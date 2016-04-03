@@ -62,9 +62,11 @@ namespace zhihuDaily.Model
         #region localSettings
         const string SettingKey_NightModeTheme = "app_night_mode_theme";
         const string SettingKey_PicMode = "app_pictual_mode";
-        const string SettingKey_SplashInfo = "app_splash_info";
+        const string SettingKey_SplashInfo = "app_splash_screen";
         const string SettingKey_ThemeMode = "app_theme_mode";
         const string SettingKey_UsingTile = "app_tile_mode";
+        const string SettingKey_SinaLogin = "app_login_info";
+        const string SettingKey_UserInfo = "app_user_info";
         #endregion
 
         #region RoamingSetting
@@ -72,18 +74,45 @@ namespace zhihuDaily.Model
         const string rSettingKey_CollectionNews = "app_collection_news";
         #endregion
 
-        string localDefault = JsonConvertHelper.JsonSerializer(new StartImage { Text= "Image : 1tu / pitrs",Img="" });
+        public string LoginInfoJson
+        {
+            get {
+                var obj = this.settings.Values[SettingKey_SinaLogin];
+                return obj == null ? string.Empty: obj.ToString();
+            }
+            set
+            {
+                this.settings.Values[SettingKey_SinaLogin] = value;
+                RaisePropertyChanged(() => LoginInfoJson);
+            }
+        }
+
+        public string UserInfoJson
+        {
+            get
+            {
+                var obj = this.settings.Values[SettingKey_UserInfo];
+                return obj == null ? string.Empty : obj.ToString();
+            }
+            set
+            {
+                this.settings.Values[SettingKey_UserInfo] = value;
+                RaisePropertyChanged(() => UserInfoJson);
+            }
+        }
+
+
         public string SplashInfo
         {
             get
             {
                 var obj = this.settings.Values[SettingKey_SplashInfo];
-                return obj == null ? localDefault : obj.ToString();
+                return obj == null ? "{\"img\":\"ms-appx:///Assets/Images/splash.png\",\"text\":\"Image : 1tu / pitrs\"}" : obj.ToString();
             }
             set
             {
                 this.settings.Values[SettingKey_SplashInfo] = value;
-                RaisePropertyChanged(() => SplashInfo);
+                //RaisePropertyChanged(() => SplashInfo);
             }
         }
 

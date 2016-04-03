@@ -71,7 +71,7 @@ namespace zhihuDaily
             this._cachedFileNames = (await this._cacheFolder.GetFilesAsync()).Select(c => c.Name).ToList();
         }
         /// <summary>
-        /// 清除10天前的图片缓存
+        /// 清除7天前的图片缓存
         /// </summary>
         /// <returns></returns>
         public async Task ClearOutDateCache()
@@ -79,7 +79,7 @@ namespace zhihuDaily
            var files = await this._cacheFolder.GetFilesAsync();
             foreach (var file in files)
             {
-                if((file.DateCreated-DateTime.Now).TotalDays>10)
+                if((file.DateCreated-DateTime.Now).TotalDays>7)
                     await file.DeleteAsync();
             }
         }
@@ -100,13 +100,15 @@ namespace zhihuDaily
         {
             if (_instance == null)
             {
-               // lock (lockHelper)
+                lock (lockHelper)
                 {
-                 //   if (_instance == null)
-                    _instance = new ImageCache();
-                    await _instance.LoadCache();
+                    if (_instance == null)
+                    { 
+                        _instance = new ImageCache();
+                    }
                 }
-            }
+                await _instance.LoadCache();
+            }           
             return _instance;
         }
     }

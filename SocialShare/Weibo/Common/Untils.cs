@@ -9,14 +9,14 @@ using Windows.Web.Http;
 
 namespace SocialShare.Weibo
 {
-    internal static class Untils
+    public static class Untils
     {
-        internal static long ToTimestamp(DateTime dateTime)
+        public static long ToTimestamp(DateTime dateTime)
         {
             return (long)(dateTime.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
         }
 
-        internal static DateTime FromTimestamp(long unixTimestamp)
+        public static DateTime FromTimestamp(long unixTimestamp)
         {
             DateTime utcDateTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             return utcDateTime.AddSeconds(unixTimestamp).ToLocalTime();

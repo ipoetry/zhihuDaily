@@ -1,7 +1,11 @@
-﻿using System;
+﻿using SocialShare.Weibo;
+using SocialShare.Weibo.Model;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
+using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.System.Profile;
 using Windows.UI.Xaml;
@@ -10,7 +14,7 @@ using zhihuDaily.Model;
 
 namespace zhihuDaily.DataService
 {
-    public static class Functions
+    public class Functions
     {
         static Windows.ApplicationModel.Resources.ResourceLoader loader = new Windows.ApplicationModel.Resources.ResourceLoader();
 
@@ -205,6 +209,40 @@ namespace zhihuDaily.DataService
         public static void SendFeedBackByEmail()
         {
             SendEmail("wrox1226@live.com", "Suggestion and Feedback ", GetPhoneInfo()+GetVersionString()+"\r\n");
+        }
+
+        public async Task SinaLogin()
+        {
+            try
+            {
+                string loginInfoJson = AppSettings.Instance.LoginInfoJson;
+                var loginInfo = loginInfoJson != string.Empty ? SocialShare.Weibo.JsonConvertHelper.JsonDeserialize<LoginInfo>(loginInfoJson) : new LoginInfo();
+                WeiboClient client = new WeiboClient(loginInfo);
+                loginInfo = await client.LoginAsync();
+                AppSettings.Instance.LoginInfoJson = SocialShare.Weibo.JsonConvertHelper.JsonSerializer(loginInfo);
+
+                string resJson = await WebProvider.GetInstance().SendPostRequestAsync("http://news-at.zhihu.com/api/4/login", AppSettings.Instance.LoginInfoJson, WebProvider.ContentType.ContentType3);
+
+                UserInfo userInfo = DataService.JsonConvertHelper.JsonDeserialize<UserInfo>(resJson);
+                if (userInfo != null)
+                {
+                    var folder = ApplicationData.Current.LocalFolder;
+                    string fileName = System.IO.Path.GetFileName(userInfo.Avatar);
+                    var storageFile = await folder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+
+                    await new NewsImageDowloader().SaveImage(userInfo.Avatar, storageFile);
+
+                    userInfo.Avatar = $"ms-appdata:///local/{fileName}";
+
+                    ViewModel.ViewModelLocator.AppShell.UserInfo = userInfo;
+
+                    AppSettings.Instance.UserInfoJson = DataService.JsonConvertHelper.JsonSerializer(userInfo);
+                }
+            }
+            catch (Exception ex)
+            {
+                ToastPrompt.ShowToast(ex.Message);
+            }
         }
 
         #region Unix Time Hepler

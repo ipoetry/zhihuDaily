@@ -116,9 +116,10 @@
     <Compile Include="JsonConvertHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Weibo\Config.cs" />
+    <Compile Include="Weibo\Model\TokenResult.cs" />
     <Compile Include="Weibo\Model\AppInfo.cs" />
     <Compile Include="Weibo\Model\ShareResultBase.cs" />
-    <Compile Include="Weibo\Model\UserInfo.cs" />
+    <Compile Include="Weibo\Model\LoginInfo.cs" />
     <Compile Include="Weibo\Common\Untils.cs" />
     <Compile Include="Weibo\Model\Visbile.cs" />
     <Compile Include="Weibo\Model\WeiboResult.cs" />
@@ -129,6 +130,9 @@
   <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

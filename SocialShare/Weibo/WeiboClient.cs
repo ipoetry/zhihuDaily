@@ -10,25 +10,21 @@ namespace SocialShare.Weibo
 {
     public class WeiboClient
     {
-        public UserInfo UserInfo { get; set; }
+        public LoginInfo LoginInfo { get; set; }
         private AppInfo appInfo;
-        public WeiboClient(UserInfo userInfo)
+        public WeiboClient(LoginInfo loginInfo)
         {
-            if (userInfo == null)
-            {
-                throw new ArgumentNullException();
-            }
-
-            this.UserInfo = userInfo;
+            this.LoginInfo = loginInfo;
             this.appInfo = new AppInfo() { Key = Config.Key, Secret = Config.Secret, RedirectUri = Config.Uri };
         }
 
-        public async Task LoginAsync()
+        public async Task<LoginInfo> LoginAsync()
         {
-            if(!UserInfo.CheckUseable())
+            if(!LoginInfo.CheckUseable())
             {
-                await Authorize(await GetAuthorizeCodeAsync());
+               return await Authorize(await GetAuthorizeCodeAsync());
             }
+            return this.LoginInfo;
         }
 
         private async Task<string> GetAuthorizeCodeAsync()
@@ -50,7 +46,9 @@ namespace SocialShare.Weibo
                     code = new Uri(result.ResponseData).GetQueryParameter("code");
                     break;
                 case WebAuthenticationStatus.UserCancel:
-                    throw new Exception("user cancel authorize");
+                    System.Diagnostics.Debug.WriteLine("user cancel authorize");
+                    break;
+                //    throw new Exception("user cancel authorize");
                 case WebAuthenticationStatus.ErrorHttp:
                     throw new Exception("http connection error");
                 default:
@@ -59,7 +57,7 @@ namespace SocialShare.Weibo
             return code;
         }
 
-        private async Task Authorize(string code)
+        private async Task<LoginInfo> Authorize(string code)
         {
             Uri uri = new Uri("https://api.weibo.com/oauth2/access_token");
 
@@ -86,12 +84,15 @@ namespace SocialShare.Weibo
                 {
                     throw new Exception("network error", ex);
                 }
-                string json = await response.Content.ReadAsStringAsync();
-                dynamic accessToken=JsonConvertHelper.JsonDeserialize<object>(json);
+                string resultJson = await response.Content.ReadAsStringAsync();
 
-                UserInfo.Token = accessToken["access_token"].ToString();
-                UserInfo.ExpiresAt = Untils.ToTimestamp(time) + (long)accessToken["expires_in"];
-                UserInfo.Uid = accessToken["uid"].ToString();
+                var tokenResult=JsonConvertHelper.JsonDeserialize<TokenResult>(resultJson);
+                LoginInfo.AccessToken = tokenResult.AccessToken;
+                LoginInfo.ExpiresIn = tokenResult.ExpiresIn;
+                LoginInfo.ExpiresAt = Untils.ToTimestamp(time) + tokenResult.ExpiresIn;
+                LoginInfo.User = tokenResult.Uid;
+
+                return LoginInfo;
             }
         }
 
@@ -107,7 +108,7 @@ namespace SocialShare.Weibo
                 throw new ArgumentException("Text could not be empty", nameof(text));
             }
 
-            if (!UserInfo.CheckUseable())
+            if (!LoginInfo.CheckUseable())
             {
                 string authorizeCode = await this.GetAuthorizeCodeAsync();
                 await this.Authorize(authorizeCode);
@@ -116,7 +117,7 @@ namespace SocialShare.Weibo
             Uri uri = new Uri("https://api.weibo.com/2/statuses/update.json");
 
             Dictionary<string, string> pairs = new Dictionary<string, string>();
-            pairs.Add("access_token", UserInfo.Token);
+            pairs.Add("access_token", LoginInfo.AccessToken);
             pairs.Add("status", text);
 
             HttpFormUrlEncodedContent content = new HttpFormUrlEncodedContent(pairs);
@@ -153,7 +154,7 @@ namespace SocialShare.Weibo
                 throw new ArgumentException("Text could not be empty", nameof(text));
             }
 
-            if (!UserInfo.CheckUseable())
+            if (!LoginInfo.CheckUseable())
             {
                 string authorizeCode = await this.GetAuthorizeCodeAsync();
                 await this.Authorize(authorizeCode);
@@ -165,7 +166,7 @@ namespace SocialShare.Weibo
 
             HttpMultipartFormDataContent content = new HttpMultipartFormDataContent();
 
-            content.Add(new HttpStringContent(UserInfo.Token), "access_token");
+            content.Add(new HttpStringContent(LoginInfo.AccessToken), "access_token");
             content.Add(new HttpStringContent(text), "status");
             content.Add(bufferContent, "pic", "pic.jpg");
 

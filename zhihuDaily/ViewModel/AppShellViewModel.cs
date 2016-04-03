@@ -17,14 +17,12 @@ namespace zhihuDaily.ViewModel
         private readonly ICommonService<StartImage> _startImageService;
         public AppShellViewModel(ICommonService<StartImage> startImageService,ICommonService<Themes> themesService)
         {
-
             _startImageService = startImageService;
             _themesService = themesService;
 
             Themes_Style = new ObservableCollection<Theme_Style>();
 
-            LocalInfo = JsonConvertHelper.JsonDeserialize<StartImage>(AppSettings.Instance.SplashInfo);
-            this.SplashInfo = LocalInfo;
+            this.SplashInfo = JsonConvertHelper.JsonDeserialize<StartImage>(AppSettings.Instance.SplashInfo);
 
             this.LoadMainSource();
 
@@ -70,10 +68,9 @@ namespace zhihuDaily.ViewModel
             set
             {
                 splashInfo = value;
-                RaisePropertyChanged(() => SplashInfo);
+               // RaisePropertyChanged(() => SplashInfo);
             }
         }
-        public StartImage LocalInfo { get; set; }
 
         private Themes themes;
         /// <summary>
@@ -89,6 +86,16 @@ namespace zhihuDaily.ViewModel
             }
         }
 
+        private UserInfo userInfo;
+        public UserInfo UserInfo
+        {
+            get { return userInfo; }
+            set
+            {
+                userInfo = value;
+                RaisePropertyChanged(() => UserInfo);
+            }
+        }
 
         private ObservableCollection<Theme_Style> themes_Style;
 
@@ -103,18 +110,17 @@ namespace zhihuDaily.ViewModel
         }
 
         // if progress is complete property 
-        private bool isCompleted = false;
+        private bool isActive = false;
 
-        public bool IsCompleted
+        public bool IsActive
         {
-            get { return isCompleted; }
+            get { return isActive; }
             set
             {
-                isCompleted = value;
-                RaisePropertyChanged(() => IsCompleted);
+                isActive = value;
+                RaisePropertyChanged(() => IsActive);
             }
         }
-
 
         //Event to Command
         public RelayCommand<object> ItemClickCommand { set; get; }
@@ -123,19 +129,17 @@ namespace zhihuDaily.ViewModel
         /// <summary>
         /// Load Splash
         /// </summary>
-        public async Task LoadSplashImage()
+        public async Task UpdateSplashInfo()
         {
-            this.SplashInfo = await _startImageService.GetNotAvailableCacheObjAsync("start-image", "1080*1776");
-            if (string.IsNullOrEmpty(this.SplashInfo.Img))
+            if (NetWorkHelper.NetWrokState != 0)
             {
-                this.SplashInfo.Text = LocalInfo.Text;
-                return;
-            }
-
-            if (this.SplashInfo.Img != LocalInfo.Img)
-            {
-                AppSettings.Instance.SplashInfo = JsonConvertHelper.JsonSerializer(this.SplashInfo);
-                DownloadHelper.SaveImage(SplashInfo.Img);
+                var newSplash = await _startImageService.GetNotAvailableCacheObjAsync("start-image", "1080*1776");
+                if (System.IO.Path.GetFileNameWithoutExtension(newSplash.Img) != System.IO.Path.GetFileNameWithoutExtension(this.SplashInfo.Img))
+                {
+                    DownloadHelper.SaveImage(newSplash.Img);
+                    newSplash.Img = "ms-appdata:///local/" + System.IO.Path.GetFileName(newSplash.Img);
+                    AppSettings.Instance.SplashInfo = JsonConvertHelper.JsonSerializer(newSplash);
+                }
             }
         }
 
@@ -157,9 +161,9 @@ namespace zhihuDaily.ViewModel
                         {                         
                             Themes_Style.Add(new Theme_Style { Id = other.Id, Title = other.Name });
                         }
-                    this.IsCompleted = true;
+                    this.IsActive = true;
                 }
-                await this.LoadSplashImage();
+                await this.UpdateSplashInfo();
             }
             catch (Exception)
             {

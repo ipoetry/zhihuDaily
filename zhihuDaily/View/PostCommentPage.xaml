@@ -1,0 +1,37 @@
+﻿<Page
+    x:Class="zhihuDaily.View.PostCommentPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:zhihuDaily"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <local:PageHeader>
+            <local:PageHeader.HeaderContent>
+                <RelativePanel Margin="48,14,5,0">
+                    <TextBlock  Foreground="White" x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" VerticalAlignment="Center" RelativePanel.AlignLeftWithPanel="True"  Text="写点评"/>
+                    <Button Background="Transparent"  RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" Margin="0,-8,0,0" Command="{Binding SendCommentCommand, Mode=OneWay}" CommandParameter="{Binding CommentContent}">
+                        <Button.Content>
+                            <Image Width="26" Height="26" Source="ms-appx:///Assets/FunIcon/comment_send.png" Stretch="UniformToFill" />
+                        </Button.Content>
+                    </Button>
+                </RelativePanel>
+
+            </local:PageHeader.HeaderContent>
+        </local:PageHeader>
+        <StackPanel Grid.Row="1" Margin="0" Orientation="Vertical">
+            <TextBox BorderThickness="0" Margin="0" Name="tbCommentConent" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding CommentContent,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.PlaceholderText>
+                    不友善的言论会被删除，深度的言论会被优先展示。
+                </TextBox.PlaceholderText>
+            </TextBox>
+        </StackPanel>
+        <ProgressRing Grid.Row="1" Name="pr" Height="40" Width="40" IsActive="{Binding IsActive}"  />
+    </Grid>
+</Page>

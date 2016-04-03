@@ -1,9 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using zhihuDaily.DataService;
 using zhihuDaily.Model;
 
 namespace zhihuDaily.ViewModel
@@ -12,16 +10,53 @@ namespace zhihuDaily.ViewModel
     {
         private APIService _api = new APIService();
         private string _story_id;
-        private StoryExtra _se;
-
+        public string StoryId { get { return _story_id; } }
         public NewsCommentViewMode(string story_id, StoryExtra extra)
         {
             _story_id = story_id;
-            _se = extra;
+            StoryExtra = extra;
 
-            Update();
+            LoadMainSource();
         }
 
+        private StoryExtra _storyExtra;
+
+        public StoryExtra StoryExtra
+        {
+            get { return _storyExtra; }
+            set {
+                _storyExtra = value;
+                RaisePropertyChanged(() => StoryExtra);
+            }
+        }
+
+        private bool hasLongComments = false;
+        /// <summary>
+        /// 是否有长评论
+        /// </summary>
+        public bool HasLongComment
+        {
+            get { return hasLongComments; }
+            set
+            {
+                hasLongComments = value;
+                RaisePropertyChanged(() => HasLongComment);
+            }
+        }
+
+        private bool hasShortComments = false;
+        /// <summary>
+        /// 是否有短评论
+        /// </summary>
+        public bool HasShortComment
+        {
+            get { return hasShortComments; }
+            set
+            {
+                hasShortComments = value;
+                RaisePropertyChanged(() => HasShortComment);
+            }
+        }
 
         private CommentIncrementalLoading _short_comments;
         public CommentIncrementalLoading ShortComments
@@ -51,67 +86,23 @@ namespace zhihuDaily.ViewModel
             }
         }
 
-        private string _total_comments;
-        public string TotalComments
+        private bool isActive;
+        public bool IsActive
         {
             get
             {
-                return _total_comments;
+                return isActive;
             }
             set
             {
-                _total_comments = value;
-                RaisePropertyChanged(() => TotalComments);
-            }
-        }
-        private string _total_short_comments;
-        public string TotalShortComments
-        {
-            get
-            {
-                return _total_short_comments;
-            }
-            set
-            {
-                _total_short_comments = value;
-                RaisePropertyChanged(() => TotalShortComments);
-            }
-        }
-        private string _total_long_comments;
-        public string TotalLongComments
-        {
-            get
-            {
-                return _total_long_comments;
-            }
-            set
-            {
-                _total_long_comments = value;
-                RaisePropertyChanged(() => TotalLongComments);
+                isActive = value;
+                RaisePropertyChanged(() => IsActive);
             }
         }
 
-        private bool _is_loading;
-        public bool IsLoading
+        public async void LoadMainSource()
         {
-            get
-            {
-                return _is_loading;
-            }
-            set
-            {
-                _is_loading = value;
-                RaisePropertyChanged(() => IsLoading);
-            }
-        }
-
-        public async void Update()
-        {
-            IsLoading = true;
-
-            TotalComments = _se.Comments.ToString();
-            TotalLongComments = _se.LongComments.ToString();
-            TotalShortComments = _se.ShortComments.ToString();
+            IsActive = true;
 
             var t1 = _api.GetShortComments(_story_id);
             var t2 = _api.GetLongComments(_story_id);
@@ -123,7 +114,7 @@ namespace zhihuDaily.ViewModel
             {
                 CommentIncrementalLoading c = new CommentIncrementalLoading(short_comments.Last().Id.ToString(), _story_id, true);
                 short_comments.ForEach((comment) => { c.Add(comment); });
-
+                HasShortComment = short_comments.Count > 0;
                 ShortComments = c;
 
                 c.DataLoaded += C_DataLoaded;
@@ -133,14 +124,13 @@ namespace zhihuDaily.ViewModel
             {
                 CommentIncrementalLoading c = new CommentIncrementalLoading(long_comments.Last().Id.ToString(), _story_id, false);
                 long_comments.ForEach((comment) => { c.Add(comment); });
-
+                HasLongComment = long_comments.Count > 0;
                 LongComments = c;
 
                 c.DataLoaded += C_DataLoaded;
                 c.DataLoading += C_DataLoading;
             }
-
-            IsLoading = false;
+            IsActive = false;
         }
 
         /// <summary>
@@ -148,15 +138,16 @@ namespace zhihuDaily.ViewModel
         /// </summary>
         private void C_DataLoading()
         {
-            IsLoading = true;
+            IsActive = true;
         }
         /// <summary>
         /// 
         /// </summary>
         private void C_DataLoaded()
         {
-            IsLoading = false;
+            IsActive = false;
         }
+
     }
 
 }

@@ -14,6 +14,11 @@ namespace zhihuDaily
             flyoutBase.ShowAt(senderElement);
 
             return null;
+            //Windows.UI.Xaml.Controls.MenuFlyout mf = (Windows.UI.Xaml.Controls.MenuFlyout)FlyoutBase.GetAttachedFlyout(senderElement);
+            ////FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+            //var e = (Windows.UI.Xaml.Input.TappedRoutedEventArgs)parameter;
+            //mf.ShowAt(senderElement, e.GetPosition(null));
+            //return null;
         }
     }
 }

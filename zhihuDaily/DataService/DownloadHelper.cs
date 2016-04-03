@@ -19,6 +19,7 @@ namespace zhihuDaily.DataService
                 file);
 
             var res = await download.StartAsync();
+            
             return file;
         }
 
@@ -27,9 +28,11 @@ namespace zhihuDaily.DataService
             try
             {
                 if (string.IsNullOrEmpty(url))
-                    return;
+                    return;              
                 StorageFolder applicationFolder = ApplicationData.Current.LocalFolder;
-                await SaveAsync(new Uri(url), applicationFolder, "SplashImage.jpg");
+                var file = await applicationFolder.CreateFileAsync(System.IO.Path.GetFileName(url), CreationCollisionOption.ReplaceExisting);
+                //await SaveAsync(new Uri(url), applicationFolder, "SplashImage.jpg");
+                await new NewsImageDowloader().SaveImage(url,file);
             }
             catch (Exception)
             {   }

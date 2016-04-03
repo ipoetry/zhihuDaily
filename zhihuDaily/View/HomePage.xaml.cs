@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Phone.UI.Input;
@@ -110,6 +111,59 @@ namespace zhihuDaily
         private void MenuFlyoutItem_Click_1(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(SettingPage));
+        }
+
+        ItemsStackPanel _itemsPanel;
+        ScrollViewer _scrollView;
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            List<ScrollViewer> list = new List<ScrollViewer>();
+            FindChildren(list, newsList);  //先找到ScrollViewer 注册ViewChanged事件
+            if (list.Count > 0)
+            {
+                _scrollView = list[0];
+                _scrollView.ViewChanged += _scrollView_ViewChanged;
+            }
+            List<ItemsStackPanel> list2 = new List<ItemsStackPanel>();
+            FindChildren(list2, newsList);  //找到ItemStackPanel 它包含FirstVisibleIndex属性
+            if (list.Count > 0)
+            {
+                _itemsPanel = list2[0];
+            }
+        }
+
+        private void _scrollView_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
+        {
+            if (_scrollView.VerticalOffset > 220)
+            {
+                if (_itemsPanel != null)
+                {
+                    DateTime newsDate = (newsList.Items[_itemsPanel.FirstVisibleIndex] as Story).Date;
+                    string pageTitle = newsDate.Date.Equals(DateTime.Now.Date) ? "今日热闻" : 
+                        newsDate.ToString("MM月dd日 dddd", new System.Globalization.CultureInfo("zh-CN"));
+                    ViewModel.ViewModelLocator.HomePage.PageTitle = pageTitle;
+                }
+            }
+            else
+            {
+                ViewModel.ViewModelLocator.HomePage.PageTitle = "主页";
+            }
+        }
+
+        static void FindChildren<T>(List<T> results, DependencyObject startNode)
+                where T : DependencyObject
+        {
+            int count = Windows.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(startNode);
+            for (int i = 0; i < count; i++)
+            {
+                DependencyObject current = Windows.UI.Xaml.Media.VisualTreeHelper.GetChild(startNode, i);
+                if ((current.GetType()).Equals(typeof(T)) || (current.GetType().GetTypeInfo().IsSubclassOf(typeof(T))))
+                {
+                    T asType = (T)current;
+                    results.Add(asType);
+                }
+                FindChildren<T>(results, current);
+            }
         }
     }
 }

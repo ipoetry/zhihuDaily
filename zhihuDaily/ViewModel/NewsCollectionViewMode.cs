@@ -13,14 +13,88 @@ namespace zhihuDaily.ViewModel
 {
     class NewsCollectionViewMode: ViewModelBase
     {
+        APIService _api = new APIService();
+
         public NewsCollectionViewMode()
         {
             this.ItemClickCommand = new RelayCommand<object>((e) =>
             {
                 Messenger.Default.Send(new NotificationMessage(e, "OnItemClick"));
             });
+            LoadCollections();
         }
         public RelayCommand<object> ItemClickCommand { set; get; }
+
+        private bool isActive = true;
+
+        public bool IsActive
+        {
+            get { return isActive; }
+            set
+            {
+                isActive = value;
+                RaisePropertyChanged(() => IsActive);
+            }
+        }
+
+        private string collectionPageTitle;
+
+        public string CollectionPageTitle
+        {
+            get { return collectionPageTitle; }
+            set {
+                collectionPageTitle = value;
+                RaisePropertyChanged(()=> CollectionPageTitle);
+            }
+        }
+
+        private CollectionsIncrementalLoading collectionStories;
+
+        public CollectionsIncrementalLoading CollectionStories
+        {
+            get { return collectionStories; }
+            set {
+                collectionStories = value;
+                RaisePropertyChanged(()=> CollectionStories);
+            }
+        }
+
+        /// <summary>
+        /// 获取数据
+        /// </summary>
+        public async void LoadCollections()
+        {
+            IsActive = true;
+            var collections = await _api.GetCollectionStories();
+            if (collections != null)
+            {
+                CollectionPageTitle = collections.Count +" 条收藏";
+
+                var collectionsIncrementalLoading = new CollectionsIncrementalLoading(collections.LastTime);
+
+                collections.Stories.ForEach((cs)=> collectionsIncrementalLoading.Add(cs));
+
+                CollectionStories = collectionsIncrementalLoading;
+
+                collectionsIncrementalLoading.DataLoaded += C_DataLoaded;
+                collectionsIncrementalLoading.DataLoading += C_DataLoading;
+            }
+            IsActive = false;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        private void C_DataLoading()
+        {
+            IsActive = true;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        private void C_DataLoaded()
+        {
+            IsActive = false;
+        }
     }
 
     public abstract class CollectionNewsDataSource : DataSourceBase<Story>

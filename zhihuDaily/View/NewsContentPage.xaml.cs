@@ -283,33 +283,31 @@ namespace zhihuDaily
 
         private async void btn_newsCollection_Click(object sender, RoutedEventArgs e)
         {
-            if (!await CollectionDS.Instance.IsFavExisted(story))
+            if (AppSettings.Instance.UserInfoJson == string.Empty)
             {
-               await CollectionDS.Instance.AddFavStory(story);
-               this.imgCollection.Source = new BitmapImage(new Uri("ms-appx:///Assets/FunIcon/collected.png"));
+                await new Functions().SinaLogin();
             }
-            else
-            {
-                await CollectionDS.Instance.RemoveFav(story);
-                this.imgCollection.Source = new BitmapImage(new Uri("ms-appx:///Assets/FunIcon/collect.png"));
-            }     
+            newsContentViewModel.StoryExtra.Favorite = !newsContentViewModel.StoryExtra.Favorite;
+            await WebProvider.GetInstance().SendPostRequestAsync($"http://news-at.zhihu.com/api/4/favorite/{newsId}", string.Empty, WebProvider.ContentType.ContentType1);  
         }
 
-        private async void webView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+        private void webView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
             if (!AppSettings.Instance.IsNonePicMode)
             {
                 LoadImageAsync();
             }
-            this.imgCollection.Source = new BitmapImage(
-                await CollectionDS.Instance.IsFavExisted(story) ?
-                new Uri("ms-appx:///Assets/FunIcon/collected.png") :
-                new Uri("ms-appx:///Assets/FunIcon/collect.png"));
         }
 
         private void btnComment_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(NewsCommentPage), new object[] { newsContentViewModel.IdList[newsContentViewModel.currentIndex], newsContentViewModel.StoryExtra });
+        }
+
+        private async void btnPopul_Click(object sender, RoutedEventArgs e)
+        {
+            newsContentViewModel.StoryExtra.VoteStatus =Math.Abs(newsContentViewModel.StoryExtra.VoteStatus-1);
+            await WebProvider.GetInstance().SendPostRequestAsync($"http://news-at.zhihu.com/api/4/vote/story/{newsId}", $"data={newsContentViewModel.StoryExtra.VoteStatus}", WebProvider.ContentType.ContentType2);
         }
     }
     [DataContract]

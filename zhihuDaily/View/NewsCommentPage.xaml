@@ -6,12 +6,19 @@
     xmlns:Converter="using:zhihuDaily.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    mc:Ignorable="d" NavigationCacheMode="Enabled">
     
     <Page.Resources>
-        <Converter:TotalCommentsFormat x:Key="totalCommentsFormat"></Converter:TotalCommentsFormat>
-        <Converter:TimeFormat x:Key="timeFormat"></Converter:TimeFormat>
-    </Page.Resources>
+        <Converter:TotalCommentsFormat x:Key="totalCommentsFormat"/>
+        <Converter:TimeFormat x:Key="timeFormat"/>
+        <Converter:VisibilityConverter x:Key="VisibilityConverter"/>
+        <Converter:BackgroundVisibilityCOnverter x:Key="BackgroundVisibilityCOnverter"/>
+        <Converter:ContextMenuItemVisibility x:Key="ContextMenuItemVisibility"/>
+        <Converter:ImageConveter x:Key="ImageConveter"/>
+        <Converter:VoteTextConverter x:Key="VoteTextConverter"/>
+</Page.Resources>
     <Grid Name="mainContaier" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -19,7 +26,15 @@
         </Grid.RowDefinitions>
         <local:PageHeader>
             <local:PageHeader.HeaderContent>
-                <TextBlock  Foreground="White" x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" VerticalAlignment="Center"  Margin="48,14,0,0" Text="评论"/>
+                <RelativePanel Margin="48,14,5,0">
+                    <TextBlock  Foreground="White" x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" VerticalAlignment="Center" RelativePanel.AlignLeftWithPanel="True"  Text="评论"/>
+                    <Button Background="Transparent"  RelativePanel.AlignRightWithPanel="True" Name="btnPostComment" RelativePanel.AlignTopWithPanel="True" Margin="0,-8,0,0" Click="btnPostComment_Click">
+                        <Button.Content>
+                            <Image Width="26" Height="26" Source="ms-appx:///Assets/FunIcon/comment_write.png" Stretch="UniformToFill" />
+                        </Button.Content>
+                    </Button>
+                </RelativePanel>
+                
             </local:PageHeader.HeaderContent>
         </local:PageHeader>
         <Pivot Grid.Row="1" SelectionChanged="Pivot_SelectionChanged" Name="pivot_Main">
@@ -33,17 +48,41 @@
                         </TextBlock>
                         <TextBlock RelativePanel.RightOf="txtbLongCommentTitle"
                                    RelativePanel.AlignTopWith="txtbLongCommentTitle"
-                                   Text="{Binding TotalLongComments}"
+                                   Text="{Binding StoryExtra.LongComments}"
                                    Margin="2,0,0,0"
                                    FontSize="11" Foreground="#008BED">
 
                         </TextBlock>
                     </RelativePanel>
                 </PivotItem.Header>
-                <ListView SelectionMode="None" ItemsSource="{Binding LongComments}">
+                <Grid>
+                    <Image Margin="40,100" VerticalAlignment="Center" Source="ms-appx:///Assets/Images/Dark_Comment_Empty@2x.png" Visibility="{Binding HasLongComment,Converter={StaticResource BackgroundVisibilityCOnverter}}"></Image>
+                    <ListView SelectionMode="None" ItemsSource="{Binding LongComments}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Grid>
+                            <StackPanel>
+                                <interactivity:Interaction.Behaviors>
+                                    <core:EventTriggerBehavior EventName="Tapped">
+                                        <local:OpenMenuFlyoutAction />
+                                    </core:EventTriggerBehavior>
+                                </interactivity:Interaction.Behaviors>
+                                <FlyoutBase.AttachedFlyout>
+                                    <MenuFlyout >
+                                        <MenuFlyoutItem Background="Transparent" Visibility="{Binding Own, Converter={StaticResource ContextMenuItemVisibility},ConverterParameter='own'}" Text="删除"  Click="btnDelete_Click"/>
+                                        <MenuFlyoutItem Background="Transparent" Visibility="{Binding Own, Converter={StaticResource ContextMenuItemVisibility},ConverterParameter='notown'}" Text="{Binding Voted,Converter={StaticResource VoteTextConverter}}" Name="btnAgree" Click="btnAgree_Click"/>
+                                        <MenuFlyoutItem Background="Transparent" Visibility="{Binding Own, Converter={StaticResource ContextMenuItemVisibility},ConverterParameter='notown'}" Text="举报" Name="btnReport" Click="btnReport_Click" />
+                                        <MenuFlyoutItem Background="Transparent" Text="复制" Name="btnCopy" Click="btnCopy_Click"/>
+                                        <MenuFlyoutItem Background="Transparent" Visibility="{Binding Own, Converter={StaticResource ContextMenuItemVisibility},ConverterParameter='notown'}" Text="回复" Name="btnReply" Click="btnReply_Click"/>
+                                        <MenuFlyout.MenuFlyoutPresenterStyle>
+                                            <Style TargetType="MenuFlyoutPresenter">
+                                                <Setter Property="MaxWidth" Value="120"/>
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                </Style>
+                                        </MenuFlyout.MenuFlyoutPresenterStyle>
+                                        </MenuFlyout>
+                                </FlyoutBase.AttachedFlyout>
+                                <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*"></RowDefinition>
                                     <RowDefinition Height="auto"></RowDefinition>
@@ -54,12 +93,11 @@
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
                                     <StackPanel Grid.Column="0">
-                                        <Image
-                                       Width="30"
-                                       Height="30"
-                                       Margin="0,8,5,0"
-                                       Source="{Binding Avatar}">
-                                        </Image>
+                                        <Ellipse Width="30" Margin="0,8,5,0" Height="30">
+                                            <Ellipse.Fill>
+                                                <ImageBrush ImageSource="{Binding Avatar}"/>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
                                     </StackPanel>
                                     <Grid Grid.Column="1">
                                         <Grid.RowDefinitions>
@@ -68,32 +106,21 @@
                                             <RowDefinition Height="auto"></RowDefinition>
                                             <RowDefinition Height="auto"></RowDefinition>
                                         </Grid.RowDefinitions>
-                                        <RelativePanel Grid.Row="0" Margin="0,3,0,3">
+                                        <RelativePanel Grid.Row="0" Margin="0,8,0,3">
                                             <TextBlock RelativePanel.AlignLeftWithPanel="True"
                                                    FontSize="14"
                                                    FontWeight="Bold"
                                                    Text="{Binding Author}">
-
                                             </TextBlock>
-                                            <StackPanel RelativePanel.AlignRightWithPanel="True"
+                                            <StackPanel RelativePanel.AlignRightWithPanel="True" 
                                                     Orientation="Horizontal">
-                                                <!--<TextBlock Text="&#xE19F;"
-                                                   VerticalAlignment="Center"
-                                                   FontFamily="Segoe MDL2 Assets"
-                                                   FontSize="14">
-
-                                                </TextBlock>-->
-
-                                                <TextBlock Text="{Binding Likes}" 
-                                                   VerticalAlignment="Center"
-                                                   Margin="5,0,0,0"
-                                                   FontSize="14">
-                                                </TextBlock>
-                                                <TextBlock Text=" 赞"
-                                                   VerticalAlignment="Center"
-                                                   FontFamily="微软雅黑"
-                                                   FontSize="13">
-                                                </TextBlock>
+                                                <Rectangle Width="13" Height="13">
+                                                        <Rectangle.Fill>
+                                                                <ImageBrush ImageSource="{Binding Voted,Converter={StaticResource ImageConveter},ConverterParameter='voted'}" Stretch="UniformToFill"/>
+                                                        </Rectangle.Fill>
+                                                    </Rectangle>
+                                                <TextBlock Text="{Binding Likes}" Foreground="Gray"
+                                                   VerticalAlignment="Center" Margin="5,0,0,0" FontSize="13"/>
                                             </StackPanel>
                                         </RelativePanel>
                                         <TextBlock Grid.Row="1"
@@ -101,24 +128,31 @@
                                              Padding="0,5,0,5"
                                              FontSize="14"
                                              TextWrapping="Wrap"
-                                             Text="{Binding ShowContent}">
-
+                                             Text="{Binding Content}"/>
+                                        <TextBlock Grid.Row="2" HorizontalAlignment="Stretch" Visibility="{Binding ReplyTo ,Converter={StaticResource VisibilityConverter}}" 
+                                             Padding="0,5,0,5"
+                                             FontSize="14"
+                                             TextWrapping="Wrap">
+                                            <Run Text="{Binding ReplyTo.Author}" FontWeight="Bold"></Run>
+                                            <Run Text="{Binding ReplyTo.Content}" Foreground="Gray" ></Run>
                                         </TextBlock>
-                                        <TextBlock Grid.Row="2"
+                                        
+                                        <TextBlock Grid.Row="3"
                                            Text="{Binding Path=Time,Converter={StaticResource timeFormat}}"
                                            FontSize="12"
                                            Margin="0,0,0,5"
                                            Foreground="Gray">
                                         </TextBlock>
-                                        <Rectangle Fill="#FFEEE9E9"
+                                        <!--<Rectangle Fill="#FFEEE9E9"
                                            Height="0.1"
                                            Grid.Row="3">
 
-                                        </Rectangle>
+                                        </Rectangle>-->
                                     </Grid>
                                 </Grid>
                                 <Line X1="10" StrokeThickness="0.5" Margin="0 7 0 0" Stretch="UniformToFill" Stroke="LightGray" Grid.Row="1"></Line>
                             </Grid>
+                            </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                     <ListView.ItemContainerStyle>
@@ -127,6 +161,7 @@
                         </Style>
                     </ListView.ItemContainerStyle>
                 </ListView>
+                </Grid>
             </PivotItem>
             <PivotItem Tag="short">
                 <PivotItem.Header>
@@ -137,92 +172,114 @@
                         </TextBlock>
                         <TextBlock RelativePanel.RightOf="txtbShortCommentTitle"
                                    RelativePanel.AlignTopWith="txtbShortCommentTitle"
-                                   Text="{Binding TotalShortComments}"
+                                   Text="{Binding StoryExtra.ShortComments}"
                                    Margin="2,0,0,0"
                                    FontSize="11" Foreground="#008BED">
 
                         </TextBlock>
                     </RelativePanel>
                 </PivotItem.Header>
-                <ListView SelectionMode="None" ItemsSource="{Binding ShortComments}" >
+                <Grid>
+                    <Image Margin="40,100" VerticalAlignment="Center" Source="ms-appx:///Assets/Images/Dark_Comment_Empty@2x.png" Visibility="{Binding HasShortComment,Converter={StaticResource BackgroundVisibilityCOnverter}}"></Image>
+                    <ListView SelectionMode="None" ItemsSource="{Binding ShortComments}" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"></RowDefinition>
-                                    <RowDefinition Height="auto"></RowDefinition>
-                                </Grid.RowDefinitions>
+                        <StackPanel>
+                                <interactivity:Interaction.Behaviors>
+                                    <core:EventTriggerBehavior EventName="Tapped">
+                                        <local:OpenMenuFlyoutAction />
+                                    </core:EventTriggerBehavior>
+                                </interactivity:Interaction.Behaviors>
+                                <FlyoutBase.AttachedFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Background="Transparent" Visibility="{Binding Own, Converter={StaticResource ContextMenuItemVisibility},ConverterParameter='own'}" Text="删除"  Click="btnDelete_Click"/>
+                                        <MenuFlyoutItem Background="Transparent" Visibility="{Binding Own, Converter={StaticResource ContextMenuItemVisibility},ConverterParameter='notown'}" Text="{Binding Voted,Converter={StaticResource VoteTextConverter}}"  Click="btnAgree_Click"/>
+                                        <MenuFlyoutItem Background="Transparent" Visibility="{Binding Own, Converter={StaticResource ContextMenuItemVisibility},ConverterParameter='notown'}" Text="举报"  Click="btnReport_Click" />
+                                        <MenuFlyoutItem Background="Transparent"  Text="复制"  Click="btnCopy_Click"/>
+                                        <MenuFlyoutItem Background="Transparent" Visibility="{Binding Own, Converter={StaticResource ContextMenuItemVisibility},ConverterParameter='notown'}" Text="回复"  Click="btnReply_Click"/>
+                                        <MenuFlyout.MenuFlyoutPresenterStyle>
+                                            <Style TargetType="MenuFlyoutPresenter">
+                                                    <Setter Property="MaxWidth" Value="120"/>
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                </Style>
+                                        </MenuFlyout.MenuFlyoutPresenterStyle>
+                                        </MenuFlyout>
+                                </FlyoutBase.AttachedFlyout>
                                 <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                                        <ColumnDefinition Width="*"></ColumnDefinition>
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Grid.Column="0">
-                                        <Image 
-                                       Width="30"
-                                       Height="30"
-                                       Margin="0,8,5,0"
-                                       Source="{Binding Avatar}">
-                                        </Image>
-                                    </StackPanel>
-                                    <Grid Grid.Column="1">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="auto"></RowDefinition>
-                                            <RowDefinition Height="*"></RowDefinition>
-                                            <RowDefinition Height="auto"></RowDefinition>
-                                            <RowDefinition Height="auto"></RowDefinition>
-                                        </Grid.RowDefinitions>
-                                        <RelativePanel Grid.Row="0" Margin="0,3,0,0">
-                                            <TextBlock RelativePanel.AlignLeftWithPanel="True"
-                                               FontSize="14"
-                                               FontWeight="Bold"
-                                               Text="{Binding Author}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"></RowDefinition>
+                                <RowDefinition Height="auto"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <Ellipse Width="30" Margin="0,8,5,0" Height="30">
+                                        <Ellipse.Fill>
+                                            <ImageBrush ImageSource="{Binding Avatar}"/>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                </StackPanel>
+                                <Grid Grid.Column="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"></RowDefinition>
+                                        <RowDefinition Height="*"></RowDefinition>
+                                        <RowDefinition Height="auto"></RowDefinition>
+                                        <RowDefinition Height="auto"></RowDefinition>
+                                    </Grid.RowDefinitions>
+                                    <RelativePanel Grid.Row="0" Margin="0,8,0,0">
+                                        <TextBlock RelativePanel.AlignLeftWithPanel="True"
+                                            FontSize="14"
+                                            FontWeight="Bold"
+                                            Text="{Binding Author}"/>
 
+                                        <StackPanel RelativePanel.AlignRightWithPanel="True"
+                                            Orientation="Horizontal">
+                                            <Rectangle Width="13" Height="13">
+                                                <Rectangle.Fill>
+                                                                <ImageBrush ImageSource="{Binding Voted,Converter={StaticResource ImageConveter},ConverterParameter='voted'}" Stretch="UniformToFill"/>
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                            <TextBlock Text="{Binding Likes}" Foreground="Gray"
+                                                VerticalAlignment="Center"
+                                                Margin="5,0,0,0"
+                                                FontSize="13">
                                             </TextBlock>
-                                            <StackPanel RelativePanel.AlignRightWithPanel="True"
-                                                Orientation="Horizontal">
-                                                <!--<TextBlock Text="&#xE19F;"
-                                                   VerticalAlignment="Center"
-                                                   FontFamily="Segoe MDL2 Assets"
-                                                   FontSize="14">
+                                        </StackPanel>
+                                    </RelativePanel>
+                                    <TextBlock Grid.Row="1"
+                                            HorizontalAlignment="Stretch"
+                                            Padding="0,5,0,5"
+                                            FontSize="14"
+                                            TextWrapping="Wrap"
+                                            Text="{Binding Content}"/>
+                                    <TextBlock Grid.Row="2" HorizontalAlignment="Stretch" Visibility="{Binding ReplyTo ,Converter={StaticResource VisibilityConverter}}" 
+                                            Padding="0,5,0,5"
+                                            FontSize="14"
+                                            TextWrapping="Wrap">
+                                        <Run Text="{Binding ReplyTo.Author}" FontWeight="Bold"></Run>
+                                        <Run Text="{Binding ReplyTo.Content}" Foreground="Gray" ></Run>
+                                    </TextBlock>
+                                    <TextBlock Grid.Row="3"
+                                        Text="{Binding Path=Time,Converter={StaticResource timeFormat}}"
+                                        FontSize="12"
+                                        Margin="0,0,0,5"
+                                        Foreground="Gray">
+                                    </TextBlock>
+                                    <!--<Rectangle Fill="#FFEEE9E9"
+                                        Height="0.1"
+                                        Grid.Row="3">
 
-                                                </TextBlock>-->
-                                                <TextBlock Text="{Binding Likes}" 
-                                                   VerticalAlignment="Center"
-                                                   Margin="5,0,0,0"
-                                                   FontSize="14">
-                                                </TextBlock>
-                                                <TextBlock Text=" 赞"
-                                                   VerticalAlignment="Center"
-                                                    FontFamily="微软雅黑"
-                                                   FontSize="13">
-                                                </TextBlock>
-                                            </StackPanel>
-                                        </RelativePanel>
-                                        <TextBlock Grid.Row="1"
-                                           HorizontalAlignment="Stretch"
-                                           Padding="0,5,0,5"
-                                           FontSize="14"
-                                           TextWrapping="Wrap"
-                                           Text="{Binding ShowContent}">
-
-                                        </TextBlock>
-                                        <TextBlock Grid.Row="2"
-                                           Text="{Binding Path=Time,Converter={StaticResource timeFormat}}"
-                                           FontSize="12"
-                                           Margin="0,0,0,5"
-                                           Foreground="Gray">
-                                        </TextBlock>
-                                        <Rectangle Fill="#FFEEE9E9"
-                                           Height="0.1"
-                                           Grid.Row="3">
-
-                                        </Rectangle>
-                                    </Grid>
+                                    </Rectangle>-->
                                 </Grid>
-                                <Line X1="10" StrokeThickness="0.5" Margin="0 7 0 0" Stretch="UniformToFill" Stroke="LightGray" Grid.Row="1"></Line>
                             </Grid>
-                        </DataTemplate>
+                            <Line X1="10" StrokeThickness="0.5" Margin="0 7 0 0" Stretch="UniformToFill" Stroke="LightGray" Grid.Row="1"></Line>
+                        </Grid>
+                        </StackPanel>
+                    </DataTemplate>
                 </ListView.ItemTemplate>
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
@@ -230,6 +287,7 @@
                     </Style>
                 </ListView.ItemContainerStyle>
             </ListView>
+                </Grid>
             </PivotItem>
         </Pivot>
     </Grid>

@@ -185,5 +185,35 @@ namespace zhihuDaily.ViewModel
                 return new List<Comment>();
             }
         }
+
+        public async Task<CollectionNews> GetCollectionStories()
+        {
+            try
+            {
+                ICommonService<CollectionNews> _commentService = new CommonService<CollectionNews>();
+                var resObj = await _commentService.GetNotAvailableCacheObjAsync("favorites/");
+
+                return resObj;
+            }
+            catch
+            {
+                return new CollectionNews {Stories =new List<Story>()};
+            }
+        }
+        public async Task<CollectionNews> GetBeforeCollectionStories(string lastTime)
+        {
+            try
+            {
+                ICommonService<CollectionNews> _commentService = new CommonService<CollectionNews>();
+                var resObj = await _commentService.GetNotAvailableCacheObjAsync("favorites","before",lastTime);
+
+                return resObj;
+            }
+            catch(Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+                return new CollectionNews { Stories = new List<Story>() };
+            }
+        }
     }
 }

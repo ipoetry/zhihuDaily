@@ -10,7 +10,7 @@
     mc:Ignorable="d" 
     DataContext="{Binding HomePage, Source={StaticResource Locator}}"
     xmlns:Converter="using:zhihuDaily.Converters" NavigationCacheMode="Required"
-    xmlns:pr="using:PullToRefresh.UWP">
+    xmlns:pr="using:PullToRefresh.UWP" Loaded="Page_Loaded">
 
     <Page.Resources>
 
@@ -159,7 +159,7 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Foreground="White" x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" VerticalAlignment="Center" Margin="48,0,0,0" Text="首页"/>
+                    <TextBlock Foreground="White" x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" VerticalAlignment="Center" Margin="48,0,0,0" Text="{Binding PageTitle}"/>
                     <Button Foreground="White" Background="Transparent" Grid.Column="1" HorizontalAlignment="Right"  x:Name="contextButton" FontWeight="Bold"   Content="· · ·" Width="48" Height="48">
                         <Button.Flyout>
                             <MenuFlyout>
@@ -253,11 +253,18 @@
                                                 <!--<local:CacheableImage ImageUrl="{Binding Images[0]}"/>-->
                                                 <!--<Image Source="ms-appx:///Assets/FunIcon/home_pic.png" Stretch="UniformToFill" HorizontalAlignment="Right" Margin="-64,0,0,0" VerticalAlignment="Bottom" Width="36" Height="15"></Image>-->
                                                 <Image  DataContext="{Binding Images[0],Converter={StaticResource ImageCache}}" Source="{Binding Result}"  ></Image>
-                                                <Border RelativePanel.AlignRightWithPanel="True"
+                                                <!--<Border RelativePanel.AlignRightWithPanel="True"
                                                 RelativePanel.AlignBottomWithPanel="True" Background="#99000000"
                                                 Visibility="{Binding Multipic,Converter={StaticResource MultipicVisibility}}">
                                                     <TextBlock Text="多图" FontSize="11" Foreground="White" Margin="4,1,4,3"></TextBlock>
-                                                </Border>
+                                                </Border>-->
+                                                <Rectangle RelativePanel.AlignRightWithPanel="True"
+                                                RelativePanel.AlignBottomWithPanel="True" 
+                                                Visibility="{Binding Multipic,Converter={StaticResource MultipicVisibility}}"  Width="40" Height="17" >
+                                                    <Rectangle.Fill>
+                                                        <ImageBrush ImageSource="ms-appx:///Assets/FunIcon/home_pic.png" Stretch="UniformToFill"/>
+                                                    </Rectangle.Fill>
+                                                </Rectangle>
                                             </RelativePanel>
                                         </Grid>
                                         <Line X1="10" StrokeThickness="0.5" Margin="0 7 0 0" Stretch="UniformToFill" Stroke="LightGray" Grid.Row="1" ></Line>
@@ -280,5 +287,6 @@
                 </interactivity:Interaction.Behaviors>
             </pr:PullToRefreshBox>
         </Grid>
+        <ProgressRing Grid.Row="1" Name="pr" Height="40" Width="40" IsActive="{Binding IsActive}"  />
     </Grid>
 </Page>

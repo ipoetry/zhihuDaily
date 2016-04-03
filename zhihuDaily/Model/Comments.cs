@@ -16,14 +16,17 @@ namespace zhihuDaily.Model
         public int Status { get; set; }
 
         [DataMember(Name = "id")]
-        public int Id { get; set; }
-
+        public long Id { get; set; }
+      
+        private string _author;
         [DataMember(Name = "author")]
-        public string Author { get; set; }
+        public string Author { get { return "//" + _author + " : "; } set { _author = value; } }
     }
     [DataContract]
-    public class Comment
+    public class Comment:NotificationObject
     {
+        [DataMember(Name = "own")]
+        public bool Own { get; set; }
 
         [DataMember(Name = "author")]
         public string Author { get; set; }
@@ -35,33 +38,34 @@ namespace zhihuDaily.Model
         public string Avatar { get; set; }
 
         [DataMember(Name = "time")]
-        public int Time { get; set; }
+        public long Time { get; set; }
+
+        private bool voted;
+        [DataMember(Name = "voted")]
+        public bool Voted {
+            get { return voted; }
+            set {
+                voted = value;
+                RaisePropertyChanged(()=> Voted);
+            }
+        }
 
         [DataMember(Name = "id")]
-        public int Id { get; set; }
-
+        public long Id { get; set; }
+        private int likes;
         [DataMember(Name = "likes")]
-        public int Likes { get; set; }
+        public int Likes
+        {
+            get { return likes; }
+            set {
+                likes = value;
+                RaisePropertyChanged(()=> Likes);
+            }
+        }
 
         [DataMember(Name = "reply_to")]
         public ReplyTo ReplyTo { get; set; }
 
-        public string ShowContent
-        {
-            get
-            {
-                string showContent = "";
-                if (Content != null)
-                {
-                    showContent = Content;
-                }
-                if (ReplyTo != null)
-                {
-                    showContent += " //@" + ReplyTo.Author + "：" + ReplyTo.Content;
-                }
-                return showContent;
-            }
-        }
     }
     [DataContract]
     public class Comments

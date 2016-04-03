@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Phone.UI.Input;
 using Windows.UI.Core;
@@ -34,23 +35,17 @@ namespace zhihuDaily
         {
             this.InitializeComponent();
 
-            this.Loaded += (sender, args) =>
+            this.Loaded += async(sender, args) =>
             {
                 Current = this;
 
                 this.TogglePaneButton.Focus(FocusState.Programmatic);
 
-                SplashScreenAnimation();
+                await SplashScreenAnimation();
                 HardwareButtons.BackPressed += HardwareButtons_BackPressed;
 
             };
-            // SystemNavigationManager.GetForCurrentView().BackRequested += SystemNavigationManager_BackRequested;
 
-            //// If on a phone device that has hardware buttons then we hide the app's back button.
-            //if (ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
-            //{
-            //    // this.BackButton.Visibility = Visibility.Collapsed;
-            //}
             Messenger.Default.Register<NotificationMessage>(this, (msg) =>
             {
                 switch (msg.Notification)
@@ -64,17 +59,12 @@ namespace zhihuDaily
             });
         }
 
-        private void SystemNavigationManager_BackRequested(object sender, BackRequestedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             // TODO: Prepare page for display here.
             if (e.NavigationMode == NavigationMode.New)
             {
-                SplashScreenAnimation();
+               await SplashScreenAnimation();
             }
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;
         }
@@ -132,14 +122,10 @@ namespace zhihuDaily
         /// <summary>
         /// app SplashScreen
         /// </summary>
-        public async void SplashScreenAnimation()
+        public async Task SplashScreenAnimation()
         {
             view = ApplicationView.GetForCurrentView();
             view.TryEnterFullScreenMode();
-
-            img.Source = (await StorageHelper.Instance.StorageItemExistsAsync("SplashImage.jpg")) ? 
-                new BitmapImage(new Uri("ms-appdata:///local/SplashImage.jpg")):
-                new BitmapImage(new Uri("ms-appx:///Assets/Images/splash.png"));
 
             Point centerPoint = new Point(grid_Splash.ActualWidth / 2.0, grid_Splash.ActualHeight / 2.0);
             this.sfr.CenterX = centerPoint.X;
@@ -149,12 +135,12 @@ namespace zhihuDaily
                 return;
             }
 
-            DoubleAnimation ScaleXAnimation = new DoubleAnimation() { From = 1, To = 1.08, Duration = TimeSpan.FromSeconds(3) };
+            DoubleAnimation ScaleXAnimation = new DoubleAnimation() { From = 1, To = 1.10, Duration = TimeSpan.FromSeconds(3) };
             Storyboard.SetTarget(ScaleXAnimation, sfr);
             Storyboard.SetTargetProperty(ScaleXAnimation, "ScaleX");
 
 
-            DoubleAnimation ScaleYAnimation = new DoubleAnimation() { From = 1, To = 1.10, Duration = TimeSpan.FromSeconds(3) };
+            DoubleAnimation ScaleYAnimation = new DoubleAnimation() { From = 1, To = 1.15, Duration = TimeSpan.FromSeconds(3) };
             Storyboard.SetTargetProperty(ScaleYAnimation, "ScaleY");
             Storyboard.SetTarget(ScaleYAnimation, sfr);
 
@@ -163,23 +149,25 @@ namespace zhihuDaily
             //Storyboard.SetTarget(CenterXAnimation, sfr);
 
 
-            DoubleAnimation Opacity = new DoubleAnimation() { From = 1, To = 0.1, Duration = TimeSpan.FromSeconds(3) };
-            Storyboard.SetTargetProperty(Opacity, "Opacity");
-            Storyboard.SetTarget(Opacity, img); //mark
+            //DoubleAnimation Opacity = new DoubleAnimation() { From = 1, To = 0.2, Duration = TimeSpan.FromSeconds(3) };
+            //Storyboard.SetTargetProperty(Opacity, "Opacity");
+            //Storyboard.SetTarget(Opacity, img); //mark
 
             Storyboard storyboard = new Storyboard();
             storyboard.Completed += Storyboard_Completed;
             storyboard.Children.Add(ScaleXAnimation);
             storyboard.Children.Add(ScaleYAnimation);
-            storyboard.Children.Add(Opacity);
+           // storyboard.Children.Add(Opacity);
             storyboard.Begin();
 
-            await ImageCache.CreateInstance();        
+            await ImageCache.CreateInstance();
             if (AppSettings.Instance.IsUsingTile)
             {
                 LiveTileUtils.RegisterLiveTileTask();
             }
             await AppSettings.Instance.AppInit();
+
+            AutoLogin();
         }
 
         private async void Storyboard_Completed(object sender, object e)
@@ -189,7 +177,7 @@ namespace zhihuDaily
             if (view.IsFullScreenMode)
                 view.ExitFullScreenMode();
 
-            await Model.AppSettings.ShowSystemTrayAsync();
+            await AppSettings.ShowSystemTrayAsync();
         }
 
         private void lvPrev_Loaded(object sender, RoutedEventArgs e)
@@ -415,6 +403,32 @@ namespace zhihuDaily
                 await progInd.HideAsync();
                 _offlineNewsDownloader.OfflineProcessHandler -= _offlineNewsDownloader_OfflineProcessHandler;
                 _offlineNewsDownloader = null;
+            }
+        }
+
+        private async void StackPanel_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (loginName.Text != "请登录")
+            {
+                this.AppFrame.Navigate(typeof(View.UserInfoPage));
+                RootSplitView.IsPaneOpen = false;
+            }
+            else
+            {
+                await new Functions().SinaLogin();
+            }
+        }
+
+        public void  AutoLogin()
+        {
+            string userInfoJson = AppSettings.Instance.UserInfoJson;
+
+            if (userInfoJson != string.Empty)
+            {
+                UserInfo userInfo = DataService.JsonConvertHelper.JsonDeserialize<UserInfo>(userInfoJson);
+
+                ViewModel.ViewModelLocator.AppShell.UserInfo = userInfo;
+
             }
         }
     }

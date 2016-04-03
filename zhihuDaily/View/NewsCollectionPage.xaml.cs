@@ -37,7 +37,7 @@ namespace zhihuDaily
             //  if (e.NavigationMode == NavigationMode.New)
             {
                 this.DataContext = new NewsCollectionViewMode();
-                this.LoadData();
+                //this.LoadData();
             }
             //register message
             this.btn_LightModeSwitch.DataContext = AppSettings.Instance;
@@ -84,7 +84,8 @@ namespace zhihuDaily
             Story selectedStory = ((MenuFlyoutItem)sender).DataContext as Story;
             if (selectedStory != null)
             {
-                await CollectionDS.Instance.RemoveFav(selectedStory);
+                //await CollectionDS.Instance.RemoveFav(selectedStory);
+                await WebProvider.GetInstance().SendPostRequestAsync($"http://news-at.zhihu.com/api/4/favorite/{selectedStory.Id}", string.Empty, WebProvider.ContentType.ContentType1);
                 ToastPrompt.ShowToast("删除成功");
             }
         }

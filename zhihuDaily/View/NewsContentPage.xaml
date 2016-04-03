@@ -10,7 +10,8 @@
     >
 
     <Page.Resources>
-        <Converter:NumberConveter x:Key="NumberConveter"></Converter:NumberConveter>
+        <Converter:NumberConveter x:Key="NumberConveter"/>
+        <Converter:ImageConveter x:Key="ImageConveter"/>
     </Page.Resources>
 
     <Grid >
@@ -32,7 +33,7 @@
                 <Image  Source="ms-appx:Assets/FunIcon/share.png"  ></Image>
             </Button>
             <Button Background="Transparent" Grid.Column="2" Name="btn_newsCollection" Click="btn_newsCollection_Click">
-                <Image Name="imgCollection" Source="ms-appx:Assets/FunIcon/collect.png"></Image>
+                <Image Source="{Binding StoryExtra.Favorite,Converter={StaticResource ImageConveter},ConverterParameter=comment,FallbackValue='ms-appx:///Assets/FunIcon/collect.png'}"></Image>
             </Button>
             <Button Background="Transparent" Grid.Column="3" Name="btnComment" Click="btnComment_Click">
                 <Grid>
@@ -45,13 +46,13 @@
                 </Grid>
             </Button>
 
-            <Button Background="Transparent" Grid.Column="4" >
+            <Button Background="Transparent" Grid.Column="4" Name="btnPopul" Click="btnPopul_Click">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Image  Source="ms-appx:Assets/FunIcon/praise.png"></Image>
+                    <Image Source="{Binding StoryExtra.VoteStatus,Converter={StaticResource ImageConveter},ConverterParameter=popularity,FallbackValue='ms-appx:///Assets/FunIcon/praise.png'}"></Image>
                     <TextBlock Foreground="White"  Grid.Column="1" Text="{Binding StoryExtra.Popularity,Converter={StaticResource NumberConveter},FallbackValue='...'}" TextAlignment="Left" VerticalAlignment="Center"></TextBlock>
                 </Grid>
             </Button>

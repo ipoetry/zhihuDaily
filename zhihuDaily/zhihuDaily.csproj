@@ -111,6 +111,9 @@
     <Compile Include="Controls\CustomToast.cs" />
     <Compile Include="Controls\CustomToast1.cs" />
     <Compile Include="Controls\CustomToast_QQ.cs" />
+    <Compile Include="Controls\MessagePopupWindow.xaml.cs">
+      <DependentUpon>MessagePopupWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\OpenMenuFlyoutAction.cs" />
     <Compile Include="Controls\ToastBox.xaml.cs">
       <DependentUpon>ToastBox.xaml</DependentUpon>
@@ -139,10 +142,15 @@
     <Compile Include="Extensions\ColorExtension.cs" />
     <Compile Include="CacheHelper\ImageCache.cs" />
     <Compile Include="Converters\CacheImageValueConverter.cs" />
+    <Compile Include="Model\CollectionNews.cs" />
+    <Compile Include="Model\UserInfo.cs" />
+    <Compile Include="ViewModel\CollectionsIncrementalLoading.cs" />
     <Compile Include="ViewModel\CommentDataSource.cs" />
     <Compile Include="ViewModel\CommentIncrementalLoading.cs" />
     <Compile Include="ViewModel\NewsCommentViewMode.cs" />
+    <Compile Include="ViewModel\PostCommentViewModel.cs" />
     <Compile Include="ViewModel\ThemeBeforeDataSource.cs" />
+    <Compile Include="ViewModel\UserInfoViewModel.cs" />
     <Compile Include="View\NewsCommentPage.xaml.cs">
       <DependentUpon>NewsCommentPage.xaml</DependentUpon>
     </Compile>
@@ -179,6 +187,9 @@
       <DependentUpon>NewsContentPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View\PostCommentPage.xaml.cs">
+      <DependentUpon>PostCommentPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SettingPage.xaml.cs">
       <DependentUpon>SettingPage.xaml</DependentUpon>
     </Compile>
@@ -194,6 +205,9 @@
       <DependentUpon>ThemePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataService\WebProvider.cs" />
+    <Compile Include="View\UserInfoPage.xaml.cs">
+      <DependentUpon>UserInfoPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -207,13 +221,19 @@
     <Content Include="Assets\FunIcon\collect.png" />
     <Content Include="Assets\FunIcon\collected.png" />
     <Content Include="Assets\FunIcon\comment.png" />
+    <Content Include="Assets\FunIcon\comment_send.png" />
     <Content Include="Assets\FunIcon\comment_vote.png" />
     <Content Include="Assets\FunIcon\comment_voted.png" />
+    <Content Include="Assets\FunIcon\comment_write.png" />
     <Content Include="Assets\FunIcon\daily.jpeg" />
     <Content Include="Assets\FunIcon\home_pic.png" />
     <Content Include="Assets\FunIcon\ic_logo.png" />
     <Content Include="Assets\FunIcon\praise.png" />
+    <Content Include="Assets\FunIcon\praised.png" />
+    <Content Include="Assets\FunIcon\profile_edit.png" />
+    <Content Include="Assets\FunIcon\profile_edit_done.png" />
     <Content Include="Assets\FunIcon\share.png" />
+    <Content Include="Assets\Images\Dark_Comment_Empty%402x.png" />
     <Content Include="Assets\Images\dark_image_small_default.png" />
     <Content Include="Assets\FunIcon\download.png" />
     <Content Include="Assets\FunIcon\ic_launcher.png" />
@@ -223,6 +243,7 @@
     <Content Include="Assets\Images\default_pic_content_image_loading_light.png" />
     <Content Include="Assets\Images\image_small_default.png" />
     <Content Include="Assets\FunIcon\menu_home.png" />
+    <Content Include="Assets\Images\menu_avatar.png" />
     <Content Include="Assets\www\gesture.js" />
     <Content Include="Assets\Images\splash.png" />
     <Content Include="Assets\Images\splash_logo.png" />
@@ -258,6 +279,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CacheHelper\CacheableImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MessagePopupWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -301,6 +326,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\PostCommentPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\SettingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -313,16 +342,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\UserInfoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
       <Name>BehaviorsXamlSDKManaged</Name>
-    </SDKReference>
-    <SDKReference Include="Microsoft.NET.Native.Runtime.1.1, Version=1.1">
-      <Name>Microsoft .NET Core Runtime Package for Windows</Name>
-    </SDKReference>
-    <SDKReference Include="WindowsMobile, Version=10.0.10240.0">
-      <Name>Windows Mobile Extensions for the UWP %28WindowsMobile, Version=10.0.10240.0%29</Name>
     </SDKReference>
     <SDKReference Include="WindowsMobile, Version=10.0.10586.0">
       <Name>Windows Mobile Extensions for the UWP %28WindowsMobile, Version=10.0.10586.0%29</Name>
@@ -333,6 +360,10 @@
     <ProjectReference Include="..\BackgroundTaskLibrary\BackgroundTaskLibrary.csproj">
       <Project>{510812ba-ccac-4e67-af99-dd653b601ada}</Project>
       <Name>BackgroundTaskLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SocialShare\SocialShare.csproj">
+      <Project>{405814bb-4580-4130-b176-13931ada8708}</Project>
+      <Name>SocialShare</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

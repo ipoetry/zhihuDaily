@@ -54,9 +54,9 @@ namespace zhihuDaily.DataService
                     return string.IsNullOrEmpty(jsonResult4) ? new T() : JsonConvertHelper.JsonDeserialize<T>(jsonResult4);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("Error at GetObjectAsync");
+                System.Diagnostics.Debug.WriteLine("Error at GetObjectAsync:"+ex);
                 ExceptionsParameter = "未能获取到数据";
                 return new T();
             }
@@ -101,7 +101,7 @@ namespace zhihuDaily.DataService
                     return string.IsNullOrEmpty(jsonResult4) ? new T() : JsonConvertHelper.JsonDeserialize<T>(jsonResult4);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("Error 2");
                 ExceptionsParameter = "未能获取到数据";

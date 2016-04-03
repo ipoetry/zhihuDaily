@@ -76,7 +76,7 @@ namespace zhihuDaily.ViewModel
         {
             ICommonService<Theme> themeService = new CommonService<Theme>();
             Theme result = await themeService.GetObjectAsync("theme", _id);
-            int themeLastStoryId = 0;
+            //int themeLastStoryId = 0;
            // this.NewsDS = new ThemeBeforeDataSource(_latestNewsService, int.Parse(_id), themeLastStoryId);
             if (result != null)
             {

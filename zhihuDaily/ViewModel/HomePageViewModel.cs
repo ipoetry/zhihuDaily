@@ -34,6 +34,19 @@ namespace zhihuDaily.ViewModel
 
         }
 
+        private string pageTitle = "主页";
+
+        public string PageTitle {
+            get
+            {
+                return pageTitle;
+            }
+            set
+            {
+                pageTitle = value;
+                RaisePropertyChanged(() => PageTitle);
+            }
+        }
 
         private StartImage splashInfo;
         /// <summary>
@@ -48,8 +61,6 @@ namespace zhihuDaily.ViewModel
                 RaisePropertyChanged(() => SplashInfo);
             }
         }
-
-
 
         private LatestNews latestNews;
         /// <summary>
@@ -66,15 +77,15 @@ namespace zhihuDaily.ViewModel
         }
 
         // if progress is complete property 
-        private bool isCompleted = false;
+        private bool isActive = false;
 
-        public bool IsCompleted
+        public bool IsActive
         {
-            get { return isCompleted; }
+            get { return isActive; }
             set
             {
-                isCompleted = value;
-                RaisePropertyChanged(() => IsCompleted);
+                isActive = value;
+                RaisePropertyChanged(() => IsActive);
             }
         }
 
@@ -101,6 +112,7 @@ namespace zhihuDaily.ViewModel
         {
             try
             {
+                this.IsActive = true;
                 var latest = await _latestNewsService.GetObjectAsync2("news", "latest");
 
                 //await when all task finish
@@ -129,7 +141,7 @@ namespace zhihuDaily.ViewModel
                         NewsDS.Add(item);
                     }
 
-                    this.IsCompleted = true;
+                    this.IsActive = false;
                 }
             }
             catch (Exception)
@@ -177,7 +189,7 @@ namespace zhihuDaily.ViewModel
                         NewsDS.Insert(i, newList[i]);
                     }
 
-                    this.IsCompleted = true;
+                    this.IsActive = true;
                 }
             }
             catch (Exception)

@@ -28,8 +28,8 @@ namespace zhihuDaily.ViewModel
             "CA1822:MarkMembersAsStatic",
             Justification = "This non-static member is needed for data binding purposes.")]
         // public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
-        public AppShellViewModel AppShell => ServiceLocator.Current.GetInstance<AppShellViewModel>();
-        public HomePageViewModel HomePage => ServiceLocator.Current.GetInstance<HomePageViewModel>();
+        public static AppShellViewModel AppShell => ServiceLocator.Current.GetInstance<AppShellViewModel>();
+        public static HomePageViewModel HomePage => ServiceLocator.Current.GetInstance<HomePageViewModel>();
         //  public ThemePageViewModel ThemePage => ServiceLocator.Current.GetInstance<ThemePageViewModel>();
 
     }
