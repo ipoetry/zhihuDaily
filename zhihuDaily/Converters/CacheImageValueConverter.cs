@@ -34,20 +34,20 @@ namespace zhihuDaily.Converters
             //    notifier.SetTask(task, c => new BitmapImage(c));
             //    return notifier;
             //}
-            var image = value;
-            if(image != null)
-            {              
+            if (value != null)
+            {
                 var task = Task.Run(async () =>
                 {
                     var cache = await ImageCache.CreateInstance();
-                    var uri = await cache.GetImageSourceFromUrlAsync(image.ToString());
+                    var uri = await cache.GetImageSourceFromUrlAsync(value.ToString());
                     return uri;
                 });
                 var notifier = new TaskCompletionNotifier<BitmapImage>();
                 notifier.SetTask(task, c => new BitmapImage(c));
                 return notifier;
             }
-            return string.Empty;
+            else 
+                return string.Empty;
         }
 
 

@@ -33,7 +33,6 @@ namespace zhihuDaily
                 var user = ViewModel.ViewModelLocator.AppShell.UserInfo;
                 if (user != null && !string.IsNullOrEmpty(user.AccessToken))
                 {
-
                     if (httpClient.DefaultRequestHeaders.ContainsKey("Authorization"))
                     {
                         httpClient.DefaultRequestHeaders.Remove("Authorization");

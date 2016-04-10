@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="54420.wp" Publisher="CN=339764EA-8D18-41E8-8A90-F3CB50DB69F0" Version="1.3.0.0" />
+  <Identity Name="54420.wp" Publisher="CN=339764EA-8D18-41E8-8A90-F3CB50DB69F0" Version="1.4.1.0" />
   <mp:PhoneIdentity PhoneProductId="79231352-468c-4e37-82fc-a0e6ce5decd2" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>知乎日报wp</DisplayName>

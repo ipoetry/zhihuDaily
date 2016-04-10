@@ -174,10 +174,10 @@
 
         <Grid Name="grid_Content" Grid.Row="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
             <pr:PullToRefreshBox >
-                <ListView  x:Name="newsList"  ItemsSource="{Binding NewsDS}" local:ItemClickCommand.Command="{Binding ItemClickCommand}" IsItemClickEnabled="True" Foreground="{ThemeResource ApplicationForegroundThemeBrush}">
+                <ListView  x:Name="newsList"  ItemsSource="{Binding NewsDS}" ItemClick="newsList_ItemClick"  IsItemClickEnabled="True" Foreground="{ThemeResource ApplicationForegroundThemeBrush}"><!--local:ItemClickCommand.Command="{Binding ItemClickCommand}"-->
                     <ListView.Header>
                         <Grid Height="200" Margin="0 0 0 20" Background="LightGray">
-                            <FlipView x:Name="flipView"  UseTouchAnimationsForAllNavigation="True" Loaded="flipView_Loaded" Grid.Row="0" ItemsSource="{Binding LatestNews.TopStories}" Tapped="flipView_Tapped"   SelectionChanged="flipView_SelectionChanged">
+                            <FlipView x:Name="flipView" UseTouchAnimationsForAllNavigation="True" Loaded="flipView_Loaded" Grid.Row="0" ItemsSource="{Binding LatestNews.TopStories}" Tapped="flipView_Tapped"   SelectionChanged="flipView_SelectionChanged">
                                 <FlipView.ItemTemplate>
                                     <DataTemplate>
                                         <RelativePanel >

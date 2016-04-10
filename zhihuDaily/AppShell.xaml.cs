@@ -425,10 +425,9 @@ namespace zhihuDaily
 
             if (userInfoJson != string.Empty)
             {
-                UserInfo userInfo = DataService.JsonConvertHelper.JsonDeserialize<UserInfo>(userInfoJson);
+                UserInfo userInfo = JsonConvertHelper.JsonDeserialize<UserInfo>(userInfoJson);
 
                 ViewModel.ViewModelLocator.AppShell.UserInfo = userInfo;
-
             }
         }
     }

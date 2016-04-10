@@ -21,11 +21,6 @@ namespace zhihuDaily.ViewModel
             this.IdList = list;
             this.CurrentIndex = list.IndexOf(id);
             this.LoadNewsContent(CurrentIndex);
-
-            this.GoCommentPageCommand = new RelayCommand(() =>
-            {
-                
-            });
         }
 
         private List<string> idList;
@@ -98,14 +93,11 @@ namespace zhihuDaily.ViewModel
                 {                
                     this.NewsContent = content;
                     NewsContent newsContent = new NewsContent { Body = content.Body, Css = content.Css, Image = content.Image, Title = content.Title, ImageSource = content.ImageSource, ShareUrl = content.ShareUrl };
-                    await Task.Delay(1000);
-                    if (MessageNoticeHanlder != null)
-                    {
-                        MessageNoticeHanlder(newsContent);
-                    }
+                    await Task.Delay(100);
+                    MessageNoticeHanlder?.Invoke(newsContent);
                     //  Messenger.Default.Send<NotificationMessage>(new NotificationMessage(newsContent, "OnLoadCompleted"));
                     //Delay to destroy animation
-                                     
+
                     ICommonService<StoryExtra> storyExtraService = new CommonService<StoryExtra>();
                     this.StoryExtra  = await storyExtraService.GetNotAvailableCacheObjAsync("story-extra", id);
                 
@@ -124,7 +116,5 @@ namespace zhihuDaily.ViewModel
             }
 
         }
-
-        public RelayCommand GoCommentPageCommand { get; set; }
     }
 }

@@ -1,7 +1,5 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -10,7 +8,6 @@ using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using zhihuDaily.DataService;
 using zhihuDaily.Model;
@@ -209,19 +206,6 @@ namespace zhihuDaily
         {
             try
             {
-                //var model = JsonConvertHelper.JsonDeserialize<JsInvokeModel>(e.Value);
-                //switch (model.Type)
-                //{
-                //    case "swiperight":
-                //        if (newsContentViewModel.CurrentIndex > 0)
-                //            newsContentViewModel.LoadNewsContent(--newsContentViewModel.CurrentIndex);
-                //        break;
-                //    case "swipeleft":
-                //        if (newsContentViewModel.CurrentIndex < newsContentViewModel.IdList.Count - 1)
-                //            newsContentViewModel.LoadNewsContent(++newsContentViewModel.CurrentIndex);
-                //        break;
-                //    default: break;
-                //}
                 string msg = e.Value;
                 System.Diagnostics.Debug.WriteLine(msg);
                 switch (msg)
@@ -251,24 +235,6 @@ namespace zhihuDaily
             }
         }
 
-        private  void webView_DOMContentLoaded(WebView sender, WebViewDOMContentLoadedEventArgs args)
-        {
-            //try
-            //{
-
-            //    //5、为body添加手势监听
-            //    var js = @"var target = document.body;
-            //         prepareTarget(target, eventListener);";
-            //    await sender.InvokeScriptAsync("eval", new[] { js });
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    System.Diagnostics.Debug.WriteLine("注册手势监听失败：" + ex.ToString());
-            //}
-
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             DataTransferManager.ShowShareUI();
@@ -287,8 +253,11 @@ namespace zhihuDaily
             {
                 await new Functions().SinaLogin();
             }
+            if(newsContentViewModel.StoryExtra.Favorite)
+                await WebProvider.GetInstance().SendDeleteRequestAsync($"http://news-at.zhihu.com/api/4/favorite/{newsId}");
+            else
+                await WebProvider.GetInstance().SendPostRequestAsync($"http://news-at.zhihu.com/api/4/favorite/{newsId}", string.Empty, WebProvider.ContentType.ContentType1);
             newsContentViewModel.StoryExtra.Favorite = !newsContentViewModel.StoryExtra.Favorite;
-            await WebProvider.GetInstance().SendPostRequestAsync($"http://news-at.zhihu.com/api/4/favorite/{newsId}", string.Empty, WebProvider.ContentType.ContentType1);  
         }
 
         private void webView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
@@ -309,11 +278,6 @@ namespace zhihuDaily
             newsContentViewModel.StoryExtra.VoteStatus =Math.Abs(newsContentViewModel.StoryExtra.VoteStatus-1);
             await WebProvider.GetInstance().SendPostRequestAsync($"http://news-at.zhihu.com/api/4/vote/story/{newsId}", $"data={newsContentViewModel.StoryExtra.VoteStatus}", WebProvider.ContentType.ContentType2);
         }
-    }
-    [DataContract]
-    public class JsInvokeModel
-    {
-        [DataMember(Name = "type")]
-        public string Type { get; set; }
+
     }
 }

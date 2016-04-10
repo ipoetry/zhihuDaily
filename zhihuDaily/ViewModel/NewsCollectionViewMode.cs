@@ -95,6 +95,14 @@ namespace zhihuDaily.ViewModel
         {
             IsActive = false;
         }
+
+        public void UpdateCount()
+        {
+            if (CollectionStories != null)
+            {
+                CollectionPageTitle = CollectionStories.Count + " 条收藏";
+            }
+        }
     }
 
     public abstract class CollectionNewsDataSource : DataSourceBase<Story>

@@ -86,7 +86,7 @@ namespace zhihuDaily.ViewModel
             }
         }
 
-        private UserInfo userInfo;
+        private UserInfo userInfo=new UserInfo();
         public UserInfo UserInfo
         {
             get { return userInfo; }

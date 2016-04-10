@@ -1,17 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using zhihuDaily.DataService;
 using zhihuDaily.Model;
@@ -30,13 +19,13 @@ namespace zhihuDaily
         {
             this.InitializeComponent();
         }
-
+        NewsCollectionViewMode _viewModel;
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
 
-            //  if (e.NavigationMode == NavigationMode.New)
+            if (e.NavigationMode == NavigationMode.New)
             {
-                this.DataContext = new NewsCollectionViewMode();
+                this.DataContext =_viewModel = new NewsCollectionViewMode();
                 //this.LoadData();
             }
             //register message
@@ -57,10 +46,6 @@ namespace zhihuDaily
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            //if (e.SourcePageType != typeof(NewsReadingPage))
-            //{
-
-            //}
             Messenger.Default.Unregister<NotificationMessage>(this);
         }
 
@@ -85,8 +70,13 @@ namespace zhihuDaily
             if (selectedStory != null)
             {
                 //await CollectionDS.Instance.RemoveFav(selectedStory);
-                await WebProvider.GetInstance().SendPostRequestAsync($"http://news-at.zhihu.com/api/4/favorite/{selectedStory.Id}", string.Empty, WebProvider.ContentType.ContentType1);
-                ToastPrompt.ShowToast("删除成功");
+                await WebProvider.GetInstance().SendDeleteRequestAsync($"http://news-at.zhihu.com/api/4/favorite/{selectedStory.Id}");
+                if (_viewModel.CollectionStories!=null&&_viewModel.CollectionStories.Count > 0)
+                {
+                    _viewModel.CollectionStories.Remove(selectedStory);
+                    _viewModel.UpdateCount();
+                }
+                ToastPrompt.ShowToast("已成功取消收藏");
             }
         }
     }

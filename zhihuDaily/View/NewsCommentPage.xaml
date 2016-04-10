@@ -73,13 +73,16 @@
                                         <MenuFlyoutItem Background="Transparent" Visibility="{Binding Own, Converter={StaticResource ContextMenuItemVisibility},ConverterParameter='notown'}" Text="举报" Name="btnReport" Click="btnReport_Click" />
                                         <MenuFlyoutItem Background="Transparent" Text="复制" Name="btnCopy" Click="btnCopy_Click"/>
                                         <MenuFlyoutItem Background="Transparent" Visibility="{Binding Own, Converter={StaticResource ContextMenuItemVisibility},ConverterParameter='notown'}" Text="回复" Name="btnReply" Click="btnReply_Click"/>
-                                        <MenuFlyout.MenuFlyoutPresenterStyle>
+                                        <!--<MenuFlyout.MenuFlyoutPresenterStyle>
                                             <Style TargetType="MenuFlyoutPresenter">
-                                                <Setter Property="MaxWidth" Value="120"/>
-                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                --><!--<Setter Property="MaxWidth" Value="120"/>--><!--
+                                                    <Setter Property="Margin" Value="60,0"/>
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
                                                 </Style>
-                                        </MenuFlyout.MenuFlyoutPresenterStyle>
+                                        </MenuFlyout.MenuFlyoutPresenterStyle>-->
                                         </MenuFlyout>
                                 </FlyoutBase.AttachedFlyout>
                                 <Grid>
@@ -197,14 +200,7 @@
                                         <MenuFlyoutItem Background="Transparent" Visibility="{Binding Own, Converter={StaticResource ContextMenuItemVisibility},ConverterParameter='notown'}" Text="举报"  Click="btnReport_Click" />
                                         <MenuFlyoutItem Background="Transparent"  Text="复制"  Click="btnCopy_Click"/>
                                         <MenuFlyoutItem Background="Transparent" Visibility="{Binding Own, Converter={StaticResource ContextMenuItemVisibility},ConverterParameter='notown'}" Text="回复"  Click="btnReply_Click"/>
-                                        <MenuFlyout.MenuFlyoutPresenterStyle>
-                                            <Style TargetType="MenuFlyoutPresenter">
-                                                    <Setter Property="MaxWidth" Value="120"/>
-                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                                                    <Setter Property="HorizontalAlignment" Value="Center"/>
-                                                </Style>
-                                        </MenuFlyout.MenuFlyoutPresenterStyle>
-                                        </MenuFlyout>
+                                    </MenuFlyout>
                                 </FlyoutBase.AttachedFlyout>
                                 <Grid>
                             <Grid.RowDefinitions>

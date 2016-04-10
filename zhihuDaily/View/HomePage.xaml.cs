@@ -2,12 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Phone.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Navigation;
 using zhihuDaily.DataService;
 using zhihuDaily.Model;
@@ -25,25 +21,23 @@ namespace zhihuDaily
         {
             this.InitializeComponent();
         }
-        DispatcherTimer dTimer;
-        private void flipView_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            FlipView flipView = sender as FlipView;
-            if (flipView.SelectedIndex == -1) { return; }
-            if (dTimer == null)
-            {
-                dTimer = new DispatcherTimer();
-            }
-            dTimer.Interval = TimeSpan.FromSeconds(6.0); //mark          
-            dTimer.Tick += ((s, args) =>
-            {
-                if (flipView.SelectedIndex < flipView.Items.Count - 1)
-                    flipView.SelectedIndex++;
-                else
-                    flipView.SelectedIndex = 0;
-            });
 
-            dTimer.Start();
+        private void flipView_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (flipView.Items.Count > 0)
+            {
+                var dTimer = new DispatcherTimer();
+                dTimer.Interval = TimeSpan.FromSeconds(6.0); //mark          
+                dTimer.Tick += ((s, args) =>
+                {
+                    if (flipView.SelectedIndex < flipView.Items.Count - 1)
+                        flipView.SelectedIndex++;
+                    else
+                        flipView.SelectedIndex = 0;
+                });
+
+                dTimer.Start();
+            }
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -58,27 +52,27 @@ namespace zhihuDaily
 
             this.btn_LightModeSwitch.DataContext =AppSettings.Instance; //设置开关的datacontext
             Functions.SetTheme(this.grid_Content);
-            Messenger.Default.Register<NotificationMessage>(this, (msg) =>
-            {
-                switch (msg.Notification)
-                {
-                    case "OnItemClick":
-                        dynamic arges = msg.Sender;
-                        if (arges != null && arges.ClickItem.Id.ToString() != "0")
-                        {
-                            Frame.Navigate(typeof(NewsContentPage), msg.Sender);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            });
+            //Messenger.Default.Register<NotificationMessage>(this, (msg) =>
+            //{
+            //    switch (msg.Notification)
+            //    {
+            //        case "OnItemClick":
+            //            dynamic arges = msg.Sender;
+            //            if (arges != null && arges.ClickItem.Id.ToString() != "0")
+            //            {
+            //                Frame.Navigate(typeof(NewsContentPage), msg.Sender);
+            //            }
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //});
         }
 
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            Messenger.Default.Unregister<NotificationMessage>(this);
+            //Messenger.Default.Unregister<NotificationMessage>(this);
         }
 
         private void flipView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -94,17 +88,15 @@ namespace zhihuDaily
 
         private void flipView_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-            var control = sender as FlipView;
-            dynamic dobj = control.ItemsSource;
-            if (dobj != null)
+            var stories = ViewModel.ViewModelLocator.HomePage.LatestNews.TopStories;
+            if (stories != null)
             {
                 List<string> s = new List<string>();
-                foreach (var i in dobj)
+                foreach (var story in stories)
                 {
-                    s.Add(i.Id.ToString());
+                    s.Add(story.Id.ToString());
                 }
-                Frame.Navigate(typeof(NewsContentPage), new Model.NavigationArgs { CurrentList = s, ClickItem = flipView.SelectedItem });
-
+                Frame.Navigate(typeof(NewsContentPage), new NavigationArgs { CurrentList = s, ClickItem = flipView.SelectedItem });
             }
         }
 
@@ -134,7 +126,7 @@ namespace zhihuDaily
 
         private void _scrollView_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
         {
-            if (_scrollView.VerticalOffset > 220)
+            if (_scrollView.VerticalOffset > 200)
             {
                 if (_itemsPanel != null)
                 {
@@ -164,6 +156,16 @@ namespace zhihuDaily
                 }
                 FindChildren<T>(results, current);
             }
+        }
+
+        private void newsList_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            List<string> currentList = new List<string>();
+            for (int i = 0; i < ViewModel.ViewModelLocator.HomePage.NewsDS.Count; i++)
+            {
+                currentList.Add(ViewModel.ViewModelLocator.HomePage.NewsDS[i].Id.ToString());
+            }
+            Frame.Navigate(typeof(NewsContentPage), new NavigationArgs { CurrentList = currentList, ClickItem = e.ClickedItem });
         }
     }
 }

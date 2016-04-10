@@ -158,6 +158,7 @@ namespace zhihuDaily.ViewModel
         {
             try
             {
+                this.IsActive = true;
                 Messenger.Default.Send(new NotificationMessage("NotifyRefreshMenu"));
 
                 var latest = await _latestNewsService.GetObjectAsync2("news", "latest");
@@ -189,7 +190,7 @@ namespace zhihuDaily.ViewModel
                         NewsDS.Insert(i, newList[i]);
                     }
 
-                    this.IsActive = true;
+                    this.IsActive = false;
                 }
             }
             catch (Exception)

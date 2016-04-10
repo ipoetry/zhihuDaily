@@ -8,8 +8,7 @@
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     mc:Ignorable="d"
-    xmlns:Converter="using:zhihuDaily.Converters"
-    NavigationCacheMode="Required">
+    xmlns:Converter="using:zhihuDaily.Converters">
 
     <Page.Resources>
 
@@ -95,7 +94,7 @@
                             </interactivity:Interaction.Behaviors>
                             <FlyoutBase.AttachedFlyout>
                                 <MenuFlyout>
-                                    <MenuFlyoutItem Background="Transparent" Text="删除" Name="btn_DelFav" Click="btn_DelFav_Click" />
+                                    <MenuFlyoutItem Background="Transparent" Text="取消收藏" Name="btn_DelFav" Click="btn_DelFav_Click" />
                                 </MenuFlyout>
                             </FlyoutBase.AttachedFlyout>
                             <Grid Padding="5,10,5,5">
