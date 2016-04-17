@@ -6,6 +6,7 @@
     <FontFamily x:Key="SettingsFlyoutHeaderThemeFontFamily">Segoe UI</FontFamily>
     <FontFamily x:Key="SymbolThemeFontFamily">Segoe UI Symbol</FontFamily>
 
+    
 
     <!--修改系统标题栏前景色-->
     <SolidColorBrush x:Key="SystemBarAccentBrush" Color="{StaticResource BelizeHoleColor }" />
@@ -633,4 +634,10 @@
     <SolidColorBrush x:Key="SystemControlTrackUnselectedBrush" Color="{StaticResource BaseMidColor}" />
     <SolidColorBrush x:Key="SystemControlTrackUnselectedMidBrush" Color="{StaticResource BaseMediumMidColor}" />
 
+    <SolidColorBrush x:Key="PhoneBackGround" Color="#f0f0f0" />
+    <SolidColorBrush x:Key="ListviewItemBackGround" Color="#ffffff" />
+    <SolidColorBrush x:Key="ListviewItemBorderBackGround" Color="LightGray" />
+    <SolidColorBrush x:Key="TitleBackGround" Color="#008BED" />
+    <SolidColorBrush x:Key="MenuBackGround" Color="#ffffff" />
+    <SolidColorBrush x:Key="MenuItemColor" Color="#000000" />
 </ResourceDictionary>

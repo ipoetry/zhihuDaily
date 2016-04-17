@@ -108,6 +108,7 @@
     <Compile Include="CacheHelper\CacheableImage.xaml.cs">
       <DependentUpon>CacheableImage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\AppExitToast.cs" />
     <Compile Include="Controls\CustomToast.cs" />
     <Compile Include="Controls\CustomToast1.cs" />
     <Compile Include="Controls\CustomToast_QQ.cs" />
@@ -138,7 +139,6 @@
     <Compile Include="DataService\OfflineNewsDownloader.cs" />
     <Compile Include="DataService\ServceBase.cs" />
     <Compile Include="DataService\StringEncodeUtils.cs" />
-    <Compile Include="Design\Shadow.cs" />
     <Compile Include="Extensions\ColorExtension.cs" />
     <Compile Include="CacheHelper\ImageCache.cs" />
     <Compile Include="Converters\CacheImageValueConverter.cs" />
@@ -355,11 +355,21 @@
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
+    <Folder Include="Design\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AnimationToolkit\AnimationToolkit.csproj">
+      <Project>{3b412df9-ac34-419b-9ffe-69cf44ec2df6}</Project>
+      <Name>AnimationToolkit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BackgroundTaskLibrary\BackgroundTaskLibrary.csproj">
       <Project>{510812ba-ccac-4e67-af99-dd653b601ada}</Project>
       <Name>BackgroundTaskLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShadowToolkit\ShadowToolkit.csproj">
+      <Project>{6284a5d9-6e0e-4538-8dd9-4eaf5b139452}</Project>
+      <Name>ShadowToolkit</Name>
     </ProjectReference>
     <ProjectReference Include="..\SocialShare\SocialShare.csproj">
       <Project>{405814bb-4580-4130-b176-13931ada8708}</Project>

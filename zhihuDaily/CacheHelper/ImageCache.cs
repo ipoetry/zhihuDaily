@@ -18,21 +18,19 @@ namespace zhihuDaily
 
         private ImageCache()
         {
-
+            LoadCache();
         }
         public async Task<Uri> GetImageSourceFromUrlAsync(string url)
         {
             string fileName = EncryptUtils.GetMd5String(url);
-            if (this._cachedFileNames.Contains(fileName))
+            if (await this._cacheFolder.TryGetItemAsync(fileName)!=null)
             {
                 return new Uri(msImageCacheFolder + fileName);
             }
             if (await DownloadAndSaveAsync(url, fileName))
             {
-                _cachedFileNames.Add(fileName);
                 return new Uri(msImageCacheFolder + fileName);
             }
-            System.Diagnostics.Debug.WriteLine("Download image failed. " + url);
             return new Uri(url);
         }
 
@@ -63,7 +61,7 @@ namespace zhihuDaily
             }
         }
 
-        public async Task LoadCache()
+        public async void LoadCache()
         {
             this._cacheFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync(ImageCacheFolder, CreationCollisionOption.OpenIfExists);
             await ClearOutDateCache();
@@ -95,7 +93,7 @@ namespace zhihuDaily
         /// 非线程安全的
         /// </summary>
         /// <returns></returns>
-        public static async  Task<ImageCache> CreateInstance()
+        public static ImageCache CreateInstance()
         {
             if (_instance == null)
             {
@@ -106,7 +104,6 @@ namespace zhihuDaily
                         _instance = new ImageCache();
                     }
                 }
-                await _instance.LoadCache();
             }           
             return _instance;
         }

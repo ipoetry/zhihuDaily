@@ -20,7 +20,7 @@ namespace zhihuDaily.ViewModel
         public async virtual Task Refresh()
         {
             //reset
-            this._currentPage = 1;
+            this._currentPage = 0;
             this._hasMoreItems = true;
 
             this.Clear();
@@ -77,7 +77,7 @@ namespace zhihuDaily.ViewModel
 
         protected abstract Task<IList<T>> LoadItemsAsync();
 
-        protected int _currentPage = 1;
+        protected int _currentPage = 0;
         protected bool _hasMoreItems = true;
     }
 }

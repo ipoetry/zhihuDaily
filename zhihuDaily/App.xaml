@@ -5,28 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:ignore="http://www.galasoft.ch/ignore"
-             mc:Ignorable="d ignore"
-             RequestedTheme="Light"
-             xmlns:win2d="using:Microsoft.Graphics.Canvas.UI.Xaml"
-             xmlns:effects="using:zhihuDaily.Design">
+             mc:Ignorable="d"
+             RequestedTheme="Light">
     
     <Application.Resources>
 
         <ResourceDictionary>
-            <Style TargetType="effects:Shadow">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="effects:Shadow">
-                            <Grid>
-                                <win2d:CanvasControl x:Name="PART_Canvas" />
-                                <ContentControl Content="{TemplateBinding Content}" />
-                            </Grid>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
             <!--Global View Model Locator--> 
-            <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
+            
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/Styles.xaml"/>
                 <ResourceDictionary Source="Styles/CustomStyleResources.xaml"/>
@@ -37,7 +23,7 @@
                 <ResourceDictionary x:Key="Light" Source="Styles/ThemeResourcesLight.xaml"/>
                 <ResourceDictionary x:Key="Dark"  Source="Styles/ThemeResourcesDark.xaml"/>
             </ResourceDictionary.ThemeDictionaries>
-
+            <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
         </ResourceDictionary>
            
     </Application.Resources>

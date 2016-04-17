@@ -78,25 +78,6 @@ namespace zhihuDaily
 
         private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
         {
-            //e.Handled = !canexit;
-            //ToastPrompt toast = new ToastPrompt();
-            //toast.Completed += (o, ex) => { canexit = false; };
-            //toast.Show("再按一次返回键退出程序 8-)");
-            //canexit = true;
-
-            //Get a hold of the current frame so that we can inspect the app back stack.
-
-            //if (this.AppFrame == null)
-            //    return;
-
-            //// Check to see if this is the top-most page on the app back stack.
-            //if (this.AppFrame.CanGoBack && !canexit)
-            //{
-            //    // If not, set the event to handled and go back to the previous page in the app.
-            //    canexit = true;
-            //    this.AppFrame.GoBack();
-            //}
-
             bool handled = e.Handled;
             this.BackRequested(ref handled);
             e.Handled = handled;
@@ -116,17 +97,28 @@ namespace zhihuDaily
                 handled = true;
                 this.AppFrame.GoBack();
             }
+            else if (!this.AppFrame.CanGoBack && !handled)
+            {
+                if (canexit)
+                {
+                    App.Current.Exit();
+                }
+                else
+                {
+                    canexit = true;
+                    handled = true;
+                    AppExitToast toast = new AppExitToast("再按一次离开");
+                    toast.Completed += (o, ex) => { canexit = false; };
+                }
+            }
         }
 
-        ApplicationView view;
         /// <summary>
         /// app SplashScreen
         /// </summary>
         public async Task SplashScreenAnimation()
         {
-            view = ApplicationView.GetForCurrentView();
-            view.TryEnterFullScreenMode();
-
+            await Functions.ShowSystemTrayAsync(0);
             Point centerPoint = new Point(grid_Splash.ActualWidth / 2.0, grid_Splash.ActualHeight / 2.0);
             this.sfr.CenterX = centerPoint.X;
             this.sfr.CenterY = centerPoint.Y;
@@ -160,7 +152,6 @@ namespace zhihuDaily
            // storyboard.Children.Add(Opacity);
             storyboard.Begin();
 
-            await ImageCache.CreateInstance();
             if (AppSettings.Instance.IsUsingTile)
             {
                 LiveTileUtils.RegisterLiveTileTask();
@@ -174,10 +165,8 @@ namespace zhihuDaily
         {
             this.grid_Splash.Visibility = Visibility.Collapsed;
             this.grid_Main.Visibility = Visibility.Visible;
-            if (view.IsFullScreenMode)
-                view.ExitFullScreenMode();
 
-            await AppSettings.ShowSystemTrayAsync();
+            await Functions.ShowSystemTrayAsync();
         }
 
         private void lvPrev_Loaded(object sender, RoutedEventArgs e)
@@ -236,42 +225,7 @@ namespace zhihuDaily
             }
         }
 
-        //#region BackRequested Handlers
-
-        //private void SystemNavigationManager_BackRequested(object sender, BackRequestedEventArgs e)
-        //{
-        //    bool handled = e.Handled;
-        //    this.BackRequested(ref handled);
-        //    e.Handled = handled;
-        //}
-
-        //private void BackButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    bool ignored = false;
-        //    this.BackRequested(ref ignored);
-        //}
-
-        //private void BackRequested(ref bool handled)
-        //{
-        //    // Get a hold of the current frame so that we can inspect the app back stack.
-
-        //    if (this.AppFrame == null)
-        //        return;
-
-        //    // Check to see if this is the top-most page on the app back stack.
-        //    if (this.AppFrame.CanGoBack && !handled)
-        //    {
-        //        // If not, set the event to handled and go back to the previous page in the app.
-        //        handled = true;
-        //        this.AppFrame.GoBack();
-        //    }
-        //}
-
-        //#endregion
-
         #region Navigation
-
-
 
         /// <summary>
         /// Ensures the nav menu reflects reality when navigation is triggered outside of
@@ -360,8 +314,14 @@ namespace zhihuDaily
             }
         }
 
-        private void btn_NewsCollectionPage_Click(object sender, RoutedEventArgs e)
+        private async void btn_NewsCollectionPage_Click(object sender, RoutedEventArgs e)
         {
+            if (AppSettings.Instance.UserInfoJson == string.Empty)
+            {
+                await new Functions().SinaLogin();
+                if (AppSettings.Instance.UserInfoJson == string.Empty)
+                    return;
+            }
             this.AppFrame.Navigate(typeof(NewsCollectionPage));
             RootSplitView.IsPaneOpen = false;
         }

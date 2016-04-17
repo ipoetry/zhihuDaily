@@ -33,7 +33,7 @@ namespace zhihuDaily.DataService
                 if (!isDownloading) //如果不在下载状态，则执行
                 {
                     ICommonService<LatestNews> _latestNewsService = new CommonService<LatestNews>();
-                    var latest = await _latestNewsService.GetObjectAsync2("news", "latest");//today
+                    var latest = await _latestNewsService.GetObjectAsync2("stories", "latest");//today
                     if (latest.Stories != null)
                     {
                         Storys.AddRange(latest.Stories);
@@ -41,7 +41,7 @@ namespace zhihuDaily.DataService
                     for (int i = -1; i > -offlinedays; i--)
                     {
                         string date = DateTime.Now.AddDays(-i).ToString("yyyyMMdd");
-                        var result = await _latestNewsService.GetObjectAsync("news", "before", date);
+                        var result = await _latestNewsService.GetObjectAsync("stories", "before", date);
                         if (result.Stories != null)
                         {
                             Storys.AddRange(result.Stories);
@@ -54,7 +54,7 @@ namespace zhihuDaily.DataService
                 {
                     if (!isDownloading)
                     {
-                        var newsContent = await new CommonService<NewsContent>().GetObjectAsync("news", Storys[i-1].Id.ToString());
+                        var newsContent = await new CommonService<NewsContent>().GetObjectAsync("story", Storys[i-1].Id.ToString());
                         if (!string.IsNullOrEmpty(newsContent.Body))
                         {
                             IList<string> urlList = Functions.GetHtmlImageUrlList(newsContent.Body);

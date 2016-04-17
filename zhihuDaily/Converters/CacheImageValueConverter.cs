@@ -1,10 +1,5 @@
-﻿using Microsoft.Practices.ServiceLocation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -38,7 +33,7 @@ namespace zhihuDaily.Converters
             {
                 var task = Task.Run(async () =>
                 {
-                    var cache = await ImageCache.CreateInstance();
+                    var cache = ImageCache.CreateInstance();
                     var uri = await cache.GetImageSourceFromUrlAsync(value.ToString());
                     return uri;
                 });

@@ -12,12 +12,15 @@ namespace zhihuDaily.Converters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            DateTime dt=DateTime.Now;
+            DateTime newsDate;
             if (value != null)
             {
                 //如 yyyy-MM-dd dddd HH:mm:ss   2014-10-27 星期一 13:26:30
-                DateTime.TryParse(value.ToString(),out dt);
-                return dt.ToString("MM月dd日  dddd", new CultureInfo("zh-CN"));
+                DateTime.TryParse(value.ToString(),out newsDate);
+                if (newsDate.Date.Equals(DateTime.Now.Date))
+                    return "今日热闻";
+                else
+                    return newsDate.ToString("MM月dd日  dddd", new CultureInfo("zh-CN"));
             }
             return "";
         }

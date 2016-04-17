@@ -10,16 +10,15 @@
     VerticalContentAlignment="Top"
     HorizontalAlignment="Stretch"
     HorizontalContentAlignment="Stretch"
-    Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
     Height="48"
-    xmlns:effects="using:zhihuDaily.Design"
     d:DesignHeight="100"
     d:DesignWidth="400">
 
-    <Grid x:Name="grid" Background="#008BED">
+    <Grid x:Name="grid">
         <!--<effects:Shadow >-->
-            <Grid x:Name="titleBar" >              
-            <ContentPresenter x:Name="content"                            
+            <Grid x:Name="titleBar" >
+            <ContentPresenter x:Name="content" RequestedTheme="{x:Bind RequestedTheme}"   
+                                Background="{x:Null}"
                                 VerticalAlignment="{x:Bind VerticalContentAlignment}"
                                 HorizontalAlignment="{x:Bind HorizontalContentAlignment}"
                                 Margin="{x:Bind Padding}"

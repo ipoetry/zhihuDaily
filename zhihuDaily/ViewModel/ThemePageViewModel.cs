@@ -1,12 +1,9 @@
 ﻿using GalaSoft.MvvmLight;
-using Windows.UI.Popups;
 using zhihuDaily.DataService;
 using zhihuDaily.Model;
-using System;
 using Windows.UI.Xaml;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using System.Collections.Generic;
 
 namespace zhihuDaily.ViewModel
 {
@@ -16,7 +13,7 @@ namespace zhihuDaily.ViewModel
         public ThemePageViewModel(string themeId)
         {
             this.LoadTheme(themeId);
-            
+            AppTheme = AppSettings.Instance.CurrentTheme;
             this.ItemClickCommand = new RelayCommand<object>((e) =>
             {
                 Messenger.Default.Send(new NotificationMessage(e, "OnItemClick"));
@@ -40,6 +37,21 @@ namespace zhihuDaily.ViewModel
             {
                 isCompleted = value;
                 RaisePropertyChanged(() => IsCompleted);
+            }
+        }
+
+        private ElementTheme _appTheme;
+        public ElementTheme AppTheme
+        {
+            get
+            {
+                return _appTheme;
+            }
+
+            set
+            {
+                _appTheme = value;
+                RaisePropertyChanged(() => AppTheme);
             }
         }
 
@@ -85,6 +97,7 @@ namespace zhihuDaily.ViewModel
                 this.Theme.Name = result.Name;
                 this.Theme.Editors = result.Editors;
                 this.Theme.Background = result.Background;
+                this.Theme.Description = result.Description;
                 isCompleted = false;
                 //if (this.Theme.Stories != null)
                 //{

@@ -29,8 +29,8 @@ namespace zhihuDaily
                 //this.LoadData();
             }
             //register message
-            this.btn_LightModeSwitch.DataContext = AppSettings.Instance;
-            Functions.SetTheme(this.grid_Content);
+            //this.btn_LightModeSwitch.DataContext = AppSettings.Instance;
+            //Functions.SetTheme(this.grid_Content);
             Messenger.Default.Register<NotificationMessage>(this, (msg) =>
             {
                 switch (msg.Notification)
@@ -47,16 +47,6 @@ namespace zhihuDaily
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             Messenger.Default.Unregister<NotificationMessage>(this);
-        }
-
-        private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
-        {
-            Functions.btn_NightMode_Click(this.grid_Content);
-        }
-
-        private void MenuFlyoutItem_Click_1(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(SettingPage));
         }
 
         private  void LoadData()

@@ -36,7 +36,7 @@ namespace zhihuDaily
             }
             //register message
             this.btn_LightModeSwitch.DataContext = AppSettings.Instance;
-            Functions.SetTheme(this.grid_Theme);
+
             Messenger.Default.Register<NotificationMessage>(this, (msg) =>
             {
                 switch (msg.Notification)
@@ -52,10 +52,6 @@ namespace zhihuDaily
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            //if (e.SourcePageType != typeof(NewsReadingPage))
-            //{
-                
-            //}
             Messenger.Default.Unregister<NotificationMessage>(this);
         }
 
@@ -91,7 +87,10 @@ namespace zhihuDaily
 
         private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
-            Functions.btn_NightMode_Click(this.grid_Theme);
+            Functions.SwitchTheme();
+            tvw.AppTheme = AppSettings.Instance.CurrentTheme;
+            ViewModelLocator.HomePage.AppTheme = AppSettings.Instance.CurrentTheme;
+            ViewModelLocator.AppShell.AppTheme = AppSettings.Instance.CurrentTheme;
         }
 
         private void MenuFlyoutItem_Click_1(object sender, RoutedEventArgs e)

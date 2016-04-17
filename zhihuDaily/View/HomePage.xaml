@@ -7,10 +7,10 @@
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" 
+    mc:Ignorable="d" x:Name="homePage" xmlns:effects="using:ShadowToolkit"
     DataContext="{Binding HomePage, Source={StaticResource Locator}}"
-    xmlns:Converter="using:zhihuDaily.Converters" NavigationCacheMode="Required"
-    xmlns:pr="using:PullToRefresh.UWP" Loaded="Page_Loaded">
+    xmlns:Converter="using:zhihuDaily.Converters"
+    xmlns:pr="using:PullToRefresh.UWP" Loaded="Page_Loaded" RequestedTheme="{Binding AppTheme}">
 
     <Page.Resources>
 
@@ -145,15 +145,16 @@
         <Converter:DateStyleConverter x:Key="DateStyleConverter"/>
         <Converter:CacheImageValueConverter x:Key="ImageCache"/>
         <Converter:MultipicVisibility x:Key="MultipicVisibility"/>
+        <Converter:BorderBrushConverter x:Key="BorderBrushConverter"/>
     </Page.Resources>
-    <Grid >
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition />
         </Grid.RowDefinitions>
- 
-        <local:PageHeader>
-            <local:PageHeader.HeaderContent >
+
+        <!--<local:PageHeader >
+            <local:PageHeader.HeaderContent>
                 <Grid >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -170,13 +171,28 @@
                     </Button>
                 </Grid>
             </local:PageHeader.HeaderContent>
-        </local:PageHeader>
-
-        <Grid Name="grid_Content" Grid.Row="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
+        </local:PageHeader>-->
+        <Grid Background="{ThemeResource TitleBackGround}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Foreground="White" x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" VerticalAlignment="Center" Margin="48,0,0,0" Text="{Binding PageTitle}"/>
+            <Button Foreground="White" Background="Transparent" Grid.Column="1" HorizontalAlignment="Right"  x:Name="contextButton" FontWeight="Bold"   Content="· · ·" Width="48" Height="48">
+                <Button.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Name="btn_LightModeSwitch" Text="{Binding Converter={StaticResource LightModeConverter}, Path=CurrentTheme}" Click="MenuFlyoutItem_Click" ></MenuFlyoutItem>
+                        <MenuFlyoutItem Text="设置选项" Click="MenuFlyoutItem_Click_1"></MenuFlyoutItem>
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+        </Grid>
+       
+        <Grid Name="grid_Content" Grid.Row="1" Background="{ThemeResource PhoneBackGround}" >
             <pr:PullToRefreshBox >
                 <ListView  x:Name="newsList"  ItemsSource="{Binding NewsDS}" ItemClick="newsList_ItemClick"  IsItemClickEnabled="True" Foreground="{ThemeResource ApplicationForegroundThemeBrush}"><!--local:ItemClickCommand.Command="{Binding ItemClickCommand}"-->
                     <ListView.Header>
-                        <Grid Height="200" Margin="0 0 0 20" Background="LightGray">
+                        <Grid Height="220">
                             <FlipView x:Name="flipView" UseTouchAnimationsForAllNavigation="True" Loaded="flipView_Loaded" Grid.Row="0" ItemsSource="{Binding LatestNews.TopStories}" Tapped="flipView_Tapped"   SelectionChanged="flipView_SelectionChanged">
                                 <FlipView.ItemTemplate>
                                     <DataTemplate>
@@ -189,7 +205,7 @@
                                                 <Border.Background>
                                                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0.2">
                                                         <GradientStop Color="Transparent"/>
-                                                        <GradientStop Offset="1" Color="#4C000000"/>
+                                                        <GradientStop Offset="1" Color="#D8000000"/>
                                                     </LinearGradientBrush>
                                                 </Border.Background>
                                             </Border>
@@ -229,45 +245,39 @@
                                     <RowDefinition />
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
-                                <Border Visibility="{Binding IsDateTitleDisplay}" Background="#008BED" Padding="0,5" HorizontalAlignment="Stretch" Margin="0,-30,0,0">
-                                    <TextBlock Text="{Binding Date,Converter={StaticResource DateStyleConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Border Visibility="{Binding IsDateTitleDisplay}"  HorizontalAlignment="Stretch" Margin="0,5">
+                                    <!--Background="#008BED"-->
+                                    <TextBlock Text="{Binding Date,Converter={StaticResource DateStyleConverter}}" HorizontalAlignment="Left" Margin="10,0" Foreground="#666" VerticalAlignment="Center"/>
                                 </Border>
-                                <Border Visibility="{Binding IsStoryItemDisplay}" Padding="5,0,5,5">
+                                <Border Opacity="0.9" Visibility="{Binding IsStoryItemDisplay}" Padding="15,15" BorderThickness="0.5,1,1,1.5" Background="{ThemeResource ListviewItemBackGround}"  BorderBrush="{Binding ElementName=homePage,Path=RequestedTheme,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BorderBrushConverter}}" CornerRadius="5" Margin="5,0">
                                     <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition Height="8"/>
-                                        </Grid.RowDefinitions>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition/>
-                                                <ColumnDefinition Width="64"/>
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Text="{Binding Title}" HorizontalAlignment="Left" TextWrapping="Wrap" Padding="0,0,2,0" Height="64"></TextBlock>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="64"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding Title}" HorizontalAlignment="Left" TextWrapping="Wrap" Padding="0,0,2,0" Height="64"></TextBlock>
 
-                                            <RelativePanel Grid.Column="1" Width="64" Height="64" HorizontalAlignment="Right">
-                                                <RelativePanel.Background>
-                                                    <ImageBrush ImageSource="ms-appx:///Assets/Images/image_small_default.png" />
-                                                </RelativePanel.Background>
-                                                <!--<Image Source="{Binding Images[0]}"></Image>-->
-                                                <!--<local:CacheableImage ImageUrl="{Binding Images[0]}"/>-->
-                                                <!--<Image Source="ms-appx:///Assets/FunIcon/home_pic.png" Stretch="UniformToFill" HorizontalAlignment="Right" Margin="-64,0,0,0" VerticalAlignment="Bottom" Width="36" Height="15"></Image>-->
-                                                <Image  DataContext="{Binding Images[0],Converter={StaticResource ImageCache}}" Source="{Binding Result}"  ></Image>
-                                                <!--<Border RelativePanel.AlignRightWithPanel="True"
+                                        <RelativePanel Grid.Column="1" Width="64" Height="64" HorizontalAlignment="Right">
+                                            <RelativePanel.Background>
+                                                <ImageBrush ImageSource="ms-appx:///Assets/Images/image_small_default.png" />
+                                            </RelativePanel.Background>
+                                            <!--<Image Source="{Binding Images[0]}"></Image>-->
+                                            <!--<local:CacheableImage ImageUrl="{Binding Images[0]}"/>-->
+                                            <!--<Image Source="ms-appx:///Assets/FunIcon/home_pic.png" Stretch="UniformToFill" HorizontalAlignment="Right" Margin="-64,0,0,0" VerticalAlignment="Bottom" Width="36" Height="15"></Image>-->
+                                            <Image  DataContext="{Binding Images[0],Converter={StaticResource ImageCache}}" Source="{Binding Result}"  ></Image>
+                                            <!--<Border RelativePanel.AlignRightWithPanel="True"
                                                 RelativePanel.AlignBottomWithPanel="True" Background="#99000000"
                                                 Visibility="{Binding Multipic,Converter={StaticResource MultipicVisibility}}">
                                                     <TextBlock Text="多图" FontSize="11" Foreground="White" Margin="4,1,4,3"></TextBlock>
                                                 </Border>-->
-                                                <Rectangle RelativePanel.AlignRightWithPanel="True"
+                                            <Rectangle RelativePanel.AlignRightWithPanel="True"
                                                 RelativePanel.AlignBottomWithPanel="True" 
                                                 Visibility="{Binding Multipic,Converter={StaticResource MultipicVisibility}}"  Width="40" Height="17" >
-                                                    <Rectangle.Fill>
-                                                        <ImageBrush ImageSource="ms-appx:///Assets/FunIcon/home_pic.png" Stretch="UniformToFill"/>
-                                                    </Rectangle.Fill>
-                                                </Rectangle>
-                                            </RelativePanel>
-                                        </Grid>
-                                        <Line X1="10" StrokeThickness="0.5" Margin="0 7 0 0" Stretch="UniformToFill" Stroke="LightGray" Grid.Row="1" ></Line>
+                                                <Rectangle.Fill>
+                                                    <ImageBrush ImageSource="ms-appx:///Assets/FunIcon/home_pic.png" Stretch="UniformToFill"/>
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                        </RelativePanel>
                                     </Grid>
                                 </Border>
                             </Grid>

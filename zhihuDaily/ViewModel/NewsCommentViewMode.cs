@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using System.Collections.Generic;
 using System.Linq;
+using Windows.UI.Xaml;
 using zhihuDaily.DataService;
 using zhihuDaily.Model;
 
@@ -15,7 +16,7 @@ namespace zhihuDaily.ViewModel
         {
             _story_id = story_id;
             StoryExtra = extra;
-
+            AppTheme = AppSettings.Instance.CurrentTheme;
             LoadMainSource();
         }
 
@@ -99,6 +100,22 @@ namespace zhihuDaily.ViewModel
                 RaisePropertyChanged(() => IsActive);
             }
         }
+
+        private ElementTheme _appTheme;
+        public ElementTheme AppTheme
+        {
+            get
+            {
+                return _appTheme;
+            }
+
+            set
+            {
+                _appTheme = value;
+                RaisePropertyChanged(() => AppTheme);
+            }
+        }
+
 
         public async void LoadMainSource()
         {

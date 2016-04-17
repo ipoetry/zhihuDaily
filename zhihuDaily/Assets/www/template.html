@@ -18,6 +18,7 @@
     <script type="text/javascript">
         // 初始化监听对象，并监听 html。
         var hammertime = new Hammer(document.getElementsByTagName("html")[0]);
+        //hammertime.get('swipe').set({ direction: Hammer.DIRECTION_ALL });//横向和纵向的swipe事件
         hammertime.on("swipeleft", function (e) {
             if (e.pointerType !== "mouse") {
                 // 左滑，前进。
@@ -29,6 +30,18 @@
                 // 右滑，后退。
                 window.external.notify("goback");
             }
+        });
+        hammertime.on("swipeup", function (e) {
+            //if (e.pointerType !== "mouse") {
+                // 右滑，后退。
+                window.external.notify("up");
+            //}
+        });
+        hammertime.on("swipedown", function (e) {
+          //  if (e.pointerType !== "mouse") {
+                // 右滑，后退。
+                window.external.notify("down");
+           // }
         });
     </script>
 </body>

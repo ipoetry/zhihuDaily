@@ -40,9 +40,16 @@ namespace zhihuDaily.Model
                 RaisePropertyChanged(() => Stories);
             }
         }
-
+        private string description;
         [DataMember(Name = "description")]
-        public string Description { get; set; }
+        public string Description
+        {
+            get { return description; }
+            set {
+                description = value;
+                RaisePropertyChanged(()=> Description);
+            }
+        }
         private string background;
         [DataMember(Name = "background")]
         public string Background

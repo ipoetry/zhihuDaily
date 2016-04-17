@@ -32,18 +32,17 @@ namespace zhihuDaily
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {        
-            Functions.SetTheme(this.grid_Content);
+            //Functions.SetTheme(this.grid_Content);
             await settings.GetCacheSize();
         }
 
         private void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //PivotItem pi = pivot_Main.SelectedItem as PivotItem;
-            //if (pi.Tag.ToString() == "about")
-            //{
-            //    this.sp_aboutContent.Opacity = 0;
-            //    this.sb_LogoMoveUp.Begin();
-            //}
+            PivotItem pi = pivot_Main.SelectedItem as PivotItem;
+            if (pi.Tag.ToString() == "about")
+            {
+                AnimationToolkit.Animator.Use(AnimationToolkit.AnimationType.RollIn).PlayOn(this.image_Logo);
+            }
         }
 
         private void btn_FeedBack_Click(object sender, RoutedEventArgs e)

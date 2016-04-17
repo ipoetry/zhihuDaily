@@ -5,11 +5,11 @@
     xmlns:local="using:zhihuDaily"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
+    mc:Ignorable="d" x:Name="themePage"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:Converter="using:zhihuDaily.Converters" 
-    xmlns:pr="using:PullToRefresh.UWP" >
+    xmlns:pr="using:PullToRefresh.UWP" RequestedTheme="{Binding AppTheme}">
 
     <Page.Resources>
 
@@ -55,14 +55,15 @@
         <Converter:LightModeConverter x:Key="LightModeConverter"/>
         <Converter:CacheImageValueConverter x:Key="ImageCache"/>
         <Converter:MultipicVisibility x:Key="MultipicVisibility"/>
+        <Converter:BorderBrushConverter x:Key="BorderBrushConverter"/>
     </Page.Resources>
-    <Grid >
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <local:PageHeader>
+        <!--<local:PageHeader>
             <local:PageHeader.HeaderContent>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -80,26 +81,92 @@
                     </Button>
                 </Grid>
             </local:PageHeader.HeaderContent>
-        </local:PageHeader>
-        <Grid Name="grid_Theme" Grid.Row="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
+        </local:PageHeader>-->
+
+        <Grid Background="{ThemeResource TitleBackGround}" Height="48">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Foreground="White"  x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" VerticalAlignment="Center" Margin="48,0,0,0" Text="{Binding Theme.Name}"/>
+            <Button Foreground="White"  Background="Transparent" Grid.Column="1" HorizontalAlignment="Right"  x:Name="contextButton" FontWeight="Bold"   Content="· · ·" Width="48" Height="48">
+                <Button.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Name="btn_LightModeSwitch" Text="{Binding Converter={StaticResource LightModeConverter}, Path=CurrentTheme}" Click="MenuFlyoutItem_Click" ></MenuFlyoutItem>
+                        <MenuFlyoutItem Text="设置选项" Click="MenuFlyoutItem_Click_1"></MenuFlyoutItem>
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+        </Grid>
+
+        <Grid Name="grid_Theme" Grid.Row="1" Background="{ThemeResource PhoneBackGround}" >
             <pr:PullToRefreshBox RefreshInvoked="PullToRefreshBox_RefreshInvoked"><!--NewsDS-->
                 <ListView x:Name="themeList"  ItemsSource="{Binding Theme.Stories}"   local:ItemClickCommand.Command="{Binding ItemClickCommand}" IsItemClickEnabled="True">
                     <ListView.Header>
-                        <StackPanel Height="200" Name="HeadeImagerPanel" Opacity="0.6" Margin="0 0 0 20" Background="#dcdcdc">
-                            <Image x:Name="HeaderImage" DataContext="{Binding Theme.Background,Converter={StaticResource ImageCache}}" Source="{Binding Result}"  Stretch="UniformToFill" ImageOpened="HeaderImage_ImageOpened">
-                                <Image.RenderTransform>
-                                    <ScaleTransform x:Name="sfr1" />
-                                </Image.RenderTransform>
-                            </Image>
-                        </StackPanel>
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <RelativePanel Height="220">
+                                <StackPanel Height="220" Name="HeadeImagerPanel" Opacity="0.7"  Background="#dcdcdc" RelativePanel.AlignBottomWithPanel="True"
+                               RelativePanel.AlignTopWithPanel="True"
+                               RelativePanel.AlignLeftWithPanel="True"
+                               RelativePanel.AlignRightWithPanel="True">
+                                <Image x:Name="HeaderImage" DataContext="{Binding Theme.Background,Converter={StaticResource ImageCache}}" Source="{Binding Result}"  Stretch="UniformToFill" ImageOpened="HeaderImage_ImageOpened">
+                                    <Image.RenderTransform>
+                                        <ScaleTransform x:Name="sfr1" />
+                                    </Image.RenderTransform>
+                                </Image>
+                            </StackPanel>
+                                <TextBlock Text="{Binding Theme.Description}"
+                                   FontSize="18"
+                                   TextWrapping="Wrap"
+                                   Foreground="White"
+                                   RelativePanel.AlignBottomWithPanel="True"
+                                   Name="txtbThemeDescription"
+                                   Margin="30" />
+                            </RelativePanel>
+                            <StackPanel Grid.Row="1"
+                                Margin="12,5,5,5"
+                                Orientation="Horizontal">
+                                <TextBlock Text="主编"
+                                   FontSize="14"
+                                   VerticalAlignment="Center"
+                                   Foreground="Gray">
+                                </TextBlock>
+                                <GridView Margin="3,8,0,0" VerticalAlignment="Bottom"
+                                  SelectionMode="None"
+                                  ItemsSource="{Binding Theme.Editors}"
+                                  Name="gridEditors">
+                                    <GridView.ItemContainerStyle>
+                                        <Style TargetType="GridViewItem">
+                                            <Setter Property="Margin" Value="5,0,5,0"></Setter>
+                                            <Setter Property="MinWidth" Value="10"></Setter>
+                                            <Setter Property="MinHeight" Value="10"></Setter>
+                                        </Style>
+                                    </GridView.ItemContainerStyle>
+                                    <GridView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Ellipse Width="24" Height="24">
+                                                <Ellipse.Fill>
+                                                    <ImageBrush ImageSource="{Binding Avatar,FallbackValue='ms-appx:///Assets/Images/menu_avatar.png'}"/>
+                                                </Ellipse.Fill>
+                                            </Ellipse>
+                                        </DataTemplate>
+                                    </GridView.ItemTemplate>
+                                </GridView>
+                            </StackPanel>
+                        </Grid>
                     </ListView.Header>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Grid Padding="5,0,5,5">
+                            <Border Opacity="0.9" Visibility="{Binding IsStoryItemDisplay}" Padding="15,15" BorderThickness="0.5,1,1,1.5" Background="{ThemeResource ListviewItemBackGround}" CornerRadius="5" BorderBrush="{Binding ElementName=themePage,Path=RequestedTheme,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BorderBrushConverter}}" Margin="5,0">
+                            <!--<Grid Padding="5,0,5,5">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition Height="8"/>
-                                </Grid.RowDefinitions>
+                                </Grid.RowDefinitions>-->
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
@@ -107,11 +174,6 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="{Binding Title}" HorizontalAlignment="Left" TextWrapping="Wrap" Padding="0,0,4,0" Height="64"></TextBlock>
                                     <RelativePanel Grid.Column="1" Width="{Binding Images[0],Converter={StaticResource ImageWidthConverter}}" Height="64" HorizontalAlignment="Right" Visibility="{Binding Images[0],Converter={StaticResource VisibilityConverter}}">
-                                        <!--<StackPanel.Background>
-                                    <ImageBrush ImageSource="ms-appx:///Assets/Images/default.png" />
-                                </StackPanel.Background>-->
-
-                                        <!--<Image Source="{Binding Images[0]}"  ></Image>-->
                                         <Image  DataContext="{Binding Images[0],Converter={StaticResource ImageCache}}" Source="{Binding Result}"  ></Image>
                                         <Border RelativePanel.AlignRightWithPanel="True"
                                                 RelativePanel.AlignBottomWithPanel="True" Background="#99000000"
@@ -121,8 +183,9 @@
                                         <!--<local:CacheableImage ImageUrl="{Binding Images[0]}" />-->
                                     </RelativePanel>
                                 </Grid>
-                                <Line X1="10" StrokeThickness="0.5" Margin="0 7 0 0" Stretch="UniformToFill" Stroke="LightGray" Grid.Row="1" ></Line>
-                            </Grid>
+                                <!--<Line X1="10" StrokeThickness="0.5" Margin="0 7 0 0" Stretch="UniformToFill" Stroke="LightGray" Grid.Row="1" ></Line>
+                            </Grid>-->
+                            </Border>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

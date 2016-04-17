@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
+using Windows.UI.Xaml;
 using zhihuDaily.DataService;
 using zhihuDaily.Model;
 
@@ -18,6 +19,7 @@ namespace zhihuDaily.ViewModel
         public event MessageNotice MessageNoticeHanlder;
         public NewsContentViewModel(string id,List<string> list)
         {
+            AppTheme = AppSettings.Instance.CurrentTheme;
             this.IdList = list;
             this.CurrentIndex = list.IndexOf(id);
             this.LoadNewsContent(CurrentIndex);
@@ -80,6 +82,21 @@ namespace zhihuDaily.ViewModel
             }
         }
 
+        private ElementTheme _appTheme;
+        public ElementTheme AppTheme
+        {
+            get
+            {
+                return _appTheme;
+            }
+
+            set
+            {
+                _appTheme = value;
+                RaisePropertyChanged(() => AppTheme);
+            }
+        }
+
         public async void LoadNewsContent(int index)
         {
             this.IsActive = true;
@@ -87,7 +104,7 @@ namespace zhihuDaily.ViewModel
             try
             {
                 ICommonService<NewsContent> newsContentService = new CommonService<NewsContent>();
-                NewsContent content = await newsContentService.GetObjectAsync("news", id);
+                NewsContent content = await newsContentService.GetObjectAsync("story", id);
 
                 if (content.Body != null)
                 {                

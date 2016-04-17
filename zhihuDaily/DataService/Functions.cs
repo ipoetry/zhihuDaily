@@ -76,14 +76,16 @@ namespace zhihuDaily.DataService
             page.RequestedTheme = AppSettings.Instance.CurrentTheme;
         }
 
+
         public static void SetTheme(Grid page)
         {
             page.RequestedTheme = AppSettings.Instance.CurrentTheme;
+            
         }
         /// <summary>
         /// 主题切换
         /// </summary>
-        public static void SwitchTheme()
+        public async static void SwitchTheme()
         {
             var temp = AppSettings.Instance.CurrentTheme;
             if (temp == ElementTheme.Dark || temp == ElementTheme.Default)
@@ -94,7 +96,23 @@ namespace zhihuDaily.DataService
             {
                 AppSettings.Instance.CurrentTheme = ElementTheme.Dark;
             }
+
+            await ShowSystemTrayAsync();
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="opacity"></param>
+        /// <returns></returns>
+        public static async Task ShowSystemTrayAsync(double opacity = 1)
+        {
+            var statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
+            statusBar.BackgroundColor = AppSettings.Instance.CurrentTheme == ElementTheme.Light ? "#FF008BED".ToColor() : "#ff222222".ToColor();//#FF327EC0
+            statusBar.ForegroundColor = Windows.UI.Colors.White;
+            statusBar.BackgroundOpacity = opacity;
+            await statusBar.ShowAsync();
+        }
+
 
         /// <summary>
         /// 替换html字符串中的Img标签src,来实现无图模式
@@ -239,9 +257,9 @@ namespace zhihuDaily.DataService
                     AppSettings.Instance.UserInfoJson = DataService.JsonConvertHelper.JsonSerializer(userInfo);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ToastPrompt.ShowToast(ex.Message);
+                //ToastPrompt.ShowToast(ex.Message);
             }
         }
 

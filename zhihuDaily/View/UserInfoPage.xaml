@@ -18,15 +18,10 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition />
         </Grid.RowDefinitions>
-        <local:PageHeader>
+        <!--<local:PageHeader>
             <local:PageHeader.HeaderContent>
                 <RelativePanel Margin="48,14,5,0">
                     <TextBlock  Foreground="White" x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" VerticalAlignment="Center" RelativePanel.AlignLeftWithPanel="True"  Text="个人主页"/>
-                    <!--<Button Background="Transparent"  RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" Margin="0,-8,0,0" >
-                        <Button.Content>
-                            <Image Width="26" Height="26" Source="ms-appx:///Assets/FunIcon/profile_edit.png" Stretch="UniformToFill" />
-                        </Button.Content>
-                    </Button>-->
                     <ToggleButton Name="tbEdit" Background="Transparent" IsChecked="False"  RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" Margin="0,-8,0,0"  Unchecked="tbEdit_Unchecked">
                         <ToggleButton.Content>
                             <Image Width="26" Height="26" Source="{Binding ElementName=tbEdit, Path=IsChecked,Converter={StaticResource ImageConveter}, ConverterParameter=editState}" Stretch="UniformToFill" />
@@ -35,8 +30,20 @@
                 </RelativePanel>
 
             </local:PageHeader.HeaderContent>
-        </local:PageHeader>
+        </local:PageHeader>-->
 
+        <Grid Background="{ThemeResource TitleBackGround}" Height="48">
+            <RelativePanel Margin="48,14,5,0" >
+                <TextBlock  Foreground="White" x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" VerticalAlignment="Center" RelativePanel.AlignLeftWithPanel="True"  Text="个人主页"/>
+                <ToggleButton Name="tbEdit" Background="Transparent" IsChecked="False"  RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" Margin="0,-8,0,0"  Unchecked="tbEdit_Unchecked">
+                    <ToggleButton.Content>
+                        <Image Width="26" Height="26" Source="{Binding ElementName=tbEdit, Path=IsChecked,Converter={StaticResource ImageConveter}, ConverterParameter=editState}" Stretch="UniformToFill" />
+                    </ToggleButton.Content>
+                </ToggleButton>
+            </RelativePanel>
+        </Grid>
+     
+        <Grid Grid.Row="1">
         <StackPanel  Margin="20,100" HorizontalAlignment="Center">
             <Ellipse  Height="100" Width="100" Margin="0,20" IsTapEnabled="{Binding ElementName=tbEdit,Path=IsChecked}" Name="btnChangeAvater" Tapped="btnChangeAvater_Tapped">
                 <Ellipse.Fill>
@@ -60,5 +67,6 @@
                 </Button>
             </StackPanel>
         </StackPanel>
+        </Grid>
     </Grid>
 </Page>

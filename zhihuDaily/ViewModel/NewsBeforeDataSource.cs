@@ -10,27 +10,28 @@ namespace zhihuDaily.ViewModel
 {
     public class NewsBeforeDataSource : DataSourceBase<Story>
     {
-        private readonly ICommonService<LatestNews> _latestNesService;
-
-        public NewsBeforeDataSource(ICommonService<LatestNews> latestNesService)
+        private readonly ICommonService<LatestNews> _latestNewsService;
+        private DateTime _latestDate;
+        public NewsBeforeDataSource(ICommonService<LatestNews> latestNewsService,DateTime latestDate)
         {
-            _latestNesService = latestNesService;
+            _latestNewsService = latestNewsService;
+            _latestDate = latestDate;
         }
 
         protected async override Task<IList<Story>> LoadItemsAsync()
         {
-            string date = DateTime.Now.AddDays(-_currentPage).ToString("yyyyMMdd");
-            var result = await _latestNesService.GetObjectAsync("news", "before", date);
+            string date = _latestDate.AddDays(-_currentPage).ToString("yyyyMMdd");
+            var result = await _latestNewsService.GetObjectAsync("stories", "before", date);
             if (result.Stories != null)
             {
                 List<Story> tempStorys = new List<Story>();
                // tempStorys = .ToList();
-                tempStorys.Add(new Story { Date= DateTime.Now.AddDays(-_currentPage), IsDateTitleDisplay = Windows.UI.Xaml.Visibility.Visible,IsStoryItemDisplay= Windows.UI.Xaml.Visibility.Collapsed });
+                tempStorys.Add(new Story { Date= _latestDate.AddDays(-_currentPage-1), IsDateTitleDisplay = Windows.UI.Xaml.Visibility.Visible,IsStoryItemDisplay= Windows.UI.Xaml.Visibility.Collapsed });
                
                 tempStorys.AddRange(result.Stories);
                 for (int i = 1; i < tempStorys.Count; i++)
                 {
-                    tempStorys[i].Date = DateTime.Now.AddDays(-_currentPage);
+                    tempStorys[i].Date = _latestDate.AddDays(-_currentPage-1);
                     tempStorys[i].IsDateTitleDisplay = Windows.UI.Xaml.Visibility.Collapsed;
                     tempStorys[i].IsStoryItemDisplay = Windows.UI.Xaml.Visibility.Visible;
                 }

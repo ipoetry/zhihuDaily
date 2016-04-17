@@ -101,7 +101,7 @@ namespace zhihuDaily.DataService
                     return string.IsNullOrEmpty(jsonResult4) ? new T() : JsonConvertHelper.JsonDeserialize<T>(jsonResult4);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 System.Diagnostics.Debug.WriteLine("Error 2");
                 ExceptionsParameter = "未能获取到数据";

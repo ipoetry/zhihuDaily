@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -8,6 +9,7 @@ using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using zhihuDaily.DataService;
 using zhihuDaily.Model;
@@ -35,10 +37,10 @@ namespace zhihuDaily
 
         NewsContentViewModel newsContentViewModel = null;
         Story story = null;
-       // TopStory topStory = null;
+        // TopStory topStory = null;
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            Functions.SetTheme(this.wvContainer);
             // if (e.NavigationMode == NavigationMode.New)
             {
                 dynamic obj = e.Parameter;
@@ -207,7 +209,6 @@ namespace zhihuDaily
             try
             {
                 string msg = e.Value;
-                System.Diagnostics.Debug.WriteLine(msg);
                 switch (msg)
                 {
                     case "goback":
@@ -225,6 +226,12 @@ namespace zhihuDaily
                             newsContentViewModel.LoadNewsContent(++newsContentViewModel.CurrentIndex);
                         }
                             break;
+                    case "up":
+                        Debug.WriteLine("up");
+                        break;
+                    case "down":
+                        Debug.WriteLine("down");
+                        break;
                     default: break;
                 }
 
@@ -252,8 +259,10 @@ namespace zhihuDaily
             if (AppSettings.Instance.UserInfoJson == string.Empty)
             {
                 await new Functions().SinaLogin();
+                if (AppSettings.Instance.UserInfoJson == string.Empty)
+                    return;
             }
-            if(newsContentViewModel.StoryExtra.Favorite)
+            if (newsContentViewModel.StoryExtra.Favorite)
                 await WebProvider.GetInstance().SendDeleteRequestAsync($"http://news-at.zhihu.com/api/4/favorite/{newsId}");
             else
                 await WebProvider.GetInstance().SendPostRequestAsync($"http://news-at.zhihu.com/api/4/favorite/{newsId}", string.Empty, WebProvider.ContentType.ContentType1);

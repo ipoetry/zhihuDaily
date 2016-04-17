@@ -19,7 +19,7 @@ namespace zhihuDaily.ViewModel
         {
             _startImageService = startImageService;
             _themesService = themesService;
-
+            AppTheme = AppSettings.Instance.CurrentTheme;
             Themes_Style = new ObservableCollection<Theme_Style>();
 
             this.SplashInfo = JsonConvertHelper.JsonDeserialize<StartImage>(AppSettings.Instance.SplashInfo);
@@ -69,6 +69,21 @@ namespace zhihuDaily.ViewModel
             {
                 splashInfo = value;
                // RaisePropertyChanged(() => SplashInfo);
+            }
+        }
+
+        private ElementTheme _appTheme;
+        public ElementTheme AppTheme
+        {
+            get
+            {
+                return _appTheme;
+            }
+
+            set
+            {
+                _appTheme = value;
+                RaisePropertyChanged(() => AppTheme);
             }
         }
 

@@ -2,14 +2,14 @@
     x:Class="zhihuDaily.AppShell"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:zhihuDaily"
+    xmlns:local="using:zhihuDaily" xmlns:effects="using:ShadowToolkit"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" DataContext="{Binding AppShell, Source={StaticResource Locator}}"
-    KeyDown="AppShell_KeyDown" NavigationCacheMode="Required">
+    KeyDown="AppShell_KeyDown"  RequestedTheme="{Binding AppTheme}">
 
-    <Grid >
-        <Grid x:Name="grid_Splash" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Light">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid x:Name="grid_Splash">
             <Image x:Name="img" Source="{Binding SplashInfo.Img}" Stretch="UniformToFill">
                     <Image.RenderTransform>
                         <ScaleTransform x:Name="sfr" />
@@ -55,45 +55,46 @@
                    DisplayMode="Overlay"
                    OpenPaneLength="280"
                    IsTabStop="False">
-            <SplitView.Pane>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="48" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <ListView Grid.Row="1"  x:Name="lvPrev" ItemsSource="{Binding Themes_Style}" local:ItemClickCommand2.Command="{Binding ThemeItemClickCommand}"  IsItemClickEnabled="True"  Loaded="lvPrev_Loaded">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid VerticalAlignment="Center">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
-                                    <Image Width="20" Height="20" Stretch="UniformToFill" Margin="15,0,0,0">
-                                        <Image.Source>
-                                            <BitmapImage UriSource="{Binding PicUri}" DecodePixelWidth="20"/>
-                                        </Image.Source>
-                                    </Image>
-                                    <TextBlock Grid.Column="1" Text="{Binding Title}" FontSize="15" Foreground="{Binding FontColor}" Margin="{Binding TbMargin}"  VerticalAlignment="Center" />
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                        <!--<interactivity:Interaction.Behaviors>
+                <SplitView.Pane >
+                    <Grid  Background="{ThemeResource ListviewItemBackGround}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="48" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <ListView Grid.Row="1" x:Name="lvPrev" ItemsSource="{Binding Themes_Style}" local:ItemClickCommand2.Command="{Binding ThemeItemClickCommand}"  IsItemClickEnabled="True" Loaded="lvPrev_Loaded">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid VerticalAlignment="Center">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Image Width="20" Height="20" Stretch="UniformToFill" Margin="15,0,0,0">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="{Binding PicUri}" DecodePixelWidth="20"/>
+                                            </Image.Source>
+                                        </Image>
+                                        <TextBlock Grid.Column="1" Text="{Binding Title}" FontSize="15" Foreground="{ThemeResource MenuItemColor}" Margin="{Binding TbMargin}"  VerticalAlignment="Center" />
+                                        <!--{Binding FontColor}-->
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <!--<interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="ItemClick">
                                     <core:InvokeCommandAction Command="{Binding ThemeItemClickCommand}" CommandParameter="{Binding ElementName=lvPrev,Path=SelectedItem}"/>
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>-->
-                    </ListView>
-                        <Grid Grid.Row="2" Background="#008BED" Height="100" >
-                        <Grid.RowDefinitions>
+                        </ListView>
+                        <Grid Grid.Row="2" Background="{ThemeResource TitleBackGround}" Height="100" >
+                            <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="56"/>
                             </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
                             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,10,0,0" VerticalAlignment="Center" Tapped="StackPanel_Tapped">
                                 <Ellipse Width="32" Margin="20,0,10,0" Height="32">
                                     <Ellipse.Fill>
@@ -101,34 +102,34 @@
                                     </Ellipse.Fill>
                                 </Ellipse>
                                 <TextBlock FontSize="14" Name="loginName" Foreground="White"  Text="{Binding UserInfo.Name,FallbackValue='请登录',TargetNullValue='请登录'}" VerticalAlignment="Center" ></TextBlock>
-                            </StackPanel>    
-                        <Button Grid.Row="1" Grid.Column="0" Margin="0,3" Background="Transparent" Name="btn_NewsCollectionPage" Click="btn_NewsCollectionPage_Click">
-                            <Button.Content>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
+                            </StackPanel>
+                            <Button Grid.Row="1" Grid.Column="0" Margin="0,3" Background="Transparent" Name="btn_NewsCollectionPage" Click="btn_NewsCollectionPage_Click">
+                                <Button.Content>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
                                         <Image Width="24" Height="24" Stretch="UniformToFill" Source="ms-appx:///Assets/FunIcon/collect.png" Margin="5,0,0,0"/>
-                                    <TextBlock Grid.Column="1" Margin="10 0" VerticalAlignment="Center" Foreground="White" FontSize="13" Text="我的收藏"/>
-                                </Grid>
-                            </Button.Content>
-                        </Button>
-                        <Button Grid.Row="1" Grid.Column="1" Margin="0,3" Background="Transparent" Name="btn_OfflineDownload" Click="btn_OfflineDownload_Click">
-                            <Button.Content>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="1" Margin="10 0" VerticalAlignment="Center" Foreground="White" FontSize="13" Text="我的收藏"/>
+                                    </Grid>
+                                </Button.Content>
+                            </Button>
+                            <Button Grid.Row="1" Grid.Column="1" Margin="0,3" Background="Transparent" Name="btn_OfflineDownload" Click="btn_OfflineDownload_Click">
+                                <Button.Content>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
                                         <Image Width="24" Height="24" Stretch="UniformToFill" Source="ms-appx:///Assets/FunIcon/download.png" Margin="5,0,0,0"/>
-                                    <TextBlock Grid.Column="1" Name="btn_Offline" Margin="10 0" VerticalAlignment="Center" Foreground="White" FontSize="13" Text="离线下载"/>
-                                </Grid>
-                            </Button.Content>
-                        </Button>
+                                        <TextBlock Grid.Column="1" Name="btn_Offline" Margin="10 0" VerticalAlignment="Center" Foreground="White" FontSize="13" Text="离线下载"/>
+                                    </Grid>
+                                </Button.Content>
+                            </Button>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </SplitView.Pane>
+                </SplitView.Pane>
 
             <!-- OnNavigatingToPage we synchronize the selected item in the nav menu with the current page.
                  OnNavigatedToPage we move keyboard focus to the first item on the page after it's loaded. -->

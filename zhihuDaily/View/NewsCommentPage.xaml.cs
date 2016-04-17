@@ -41,7 +41,7 @@ namespace zhihuDaily
             {
                 return;
             }
-            Functions.SetTheme(this.mainContaier);
+            //Functions.SetTheme(this.mainContaier);
             object[] parameters = e.Parameter as object[];
             if (parameters != null && parameters[0] != null && parameters[1] != null)
             {
@@ -69,6 +69,8 @@ namespace zhihuDaily
             if (AppSettings.Instance.UserInfoJson == string.Empty)
             {
                 await new Functions().SinaLogin();
+                if (AppSettings.Instance.UserInfoJson == string.Empty)
+                    return;
             }
             Frame.Navigate(typeof(PostCommentPage), new[] { _viewModel.StoryId, string.Empty });
         }
@@ -124,7 +126,12 @@ namespace zhihuDaily
 
         private async void btnReply_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            await new Functions().SinaLogin();
+            if (AppSettings.Instance.UserInfoJson == string.Empty)
+            {
+                await new Functions().SinaLogin();
+                if (AppSettings.Instance.UserInfoJson == string.Empty)
+                    return;
+            }
             Comment selectedComment = ((MenuFlyoutItem)sender).DataContext as Comment;
             Frame.Navigate(typeof(PostCommentPage), new[] { _viewModel.StoryId, JsonConvertHelper.JsonSerializer(selectedComment) });
         }

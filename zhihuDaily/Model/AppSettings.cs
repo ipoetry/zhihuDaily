@@ -28,20 +28,6 @@ namespace zhihuDaily.Model
         #endregion
 
         public RelayCommand<object> ToggledCommand { get; set; }
-        public static async Task ShowSystemTrayAsync(double opacity = 1)
-        {
-            Windows.UI.ViewManagement.StatusBar statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
-            statusBar.BackgroundColor = themeStatusBarString.ToColor();
-            statusBar.ForegroundColor = Colors.White;
-            statusBar.BackgroundOpacity = 1;
-            //statusBar.ProgressIndicator.Text = text;
-            //if (!isIndeterminate)
-            //{
-            //    statusBar.ProgressIndicator.ProgressValue = 0;
-            //}
-            await statusBar.ShowAsync();
-        }
-
 
         private  string lightMode;
         public string LightMode {
@@ -152,7 +138,7 @@ namespace zhihuDaily.Model
         {
             get
             {
-                return CurrentTheme == ElementTheme.Dark;
+                return CurrentTheme != ElementTheme.Light;
             }
         }
         public string _cacheSze="计算中...";

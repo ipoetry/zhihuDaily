@@ -17,8 +17,8 @@ namespace zhihuDaily.ViewModel
         public HomePageViewModel(ICommonService<LatestNews> latestNewsService)
         {
             _latestNewsService = latestNewsService;
-           
-            this.NewsDS = new NewsBeforeDataSource(_latestNewsService);
+            AppTheme = AppSettings.Instance.CurrentTheme;
+            //this.NewsDS = new NewsBeforeDataSource(_latestNewsService);
             this.LoadMainSource();
             this.ItemClickCommand = new RelayCommand<object>((e) =>
             {
@@ -28,10 +28,24 @@ namespace zhihuDaily.ViewModel
             this.RefreshCommand = new RelayCommand(async() =>
             {
                 //Refresh the data
-                await this.LoadMainSourceAsync();          
+                await this.LoadMainSourceAsync();
                 ToastPrompt.ShowToast("已经刷新");
             });
 
+        }
+
+        private ElementTheme _appTheme;
+        public ElementTheme AppTheme
+        {
+            get
+            {
+                return _appTheme;
+            }
+
+            set {
+                _appTheme = value;
+                RaisePropertyChanged(()=> AppTheme);
+            }
         }
 
         private string pageTitle = "主页";
@@ -105,6 +119,7 @@ namespace zhihuDaily.ViewModel
         public RelayCommand<object> ItemClickCommand { set; get; }
         public RelayCommand RefreshCommand { get; set; }
 
+        private DateTime _latestDate;
         /// <summary>
         /// Load all data
         /// </summary>
@@ -113,23 +128,25 @@ namespace zhihuDaily.ViewModel
             try
             {
                 this.IsActive = true;
-                var latest = await _latestNewsService.GetObjectAsync2("news", "latest");
-
+                var latest = await _latestNewsService.GetObjectAsync2("stories", "latest");
                 //await when all task finish
                 if (latest != null&& latest.Stories != null)
                 {
-                    
+                    _latestDate = DateTime.ParseExact(latest.Date, "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
+                   
+                    this.NewsDS = new NewsBeforeDataSource(_latestNewsService, _latestDate);
+
                     this.LatestNews = latest;
                     List<Story> list = new List<Story>();
 
-                    //list.Add(new Story
-                    //{
-                    //    Date = DateTime.Now,
-                    //    IsDateTitleDisplay = Visibility.Visible,
-                    //    IsStoryItemDisplay = Visibility.Collapsed
-                    //});// 今日热闻头部
+                    list.Add(new Story
+                    {
+                        Date = DateTime.Now,
+                        IsDateTitleDisplay = Visibility.Visible,
+                        IsStoryItemDisplay = Visibility.Collapsed
+                    });// 今日热闻头部
                     list.AddRange(latest.Stories);
-                    for (int i = 0; i < list.Count; i++)
+                    for (int i = 1; i < list.Count; i++)
                     {
                         list[i].Date = DateTime.Now;
                         list[i].IsDateTitleDisplay = Visibility.Collapsed;
@@ -161,7 +178,7 @@ namespace zhihuDaily.ViewModel
                 this.IsActive = true;
                 Messenger.Default.Send(new NotificationMessage("NotifyRefreshMenu"));
 
-                var latest = await _latestNewsService.GetObjectAsync2("news", "latest");
+                var latest = await _latestNewsService.GetObjectAsync2("stories", "latest");
 
                 if (latest != null && latest.Stories != null)
                 {
@@ -177,7 +194,7 @@ namespace zhihuDaily.ViewModel
                     }
                     else
                     {
-                        this.NewsDS = new NewsBeforeDataSource(_latestNewsService);
+                        this.NewsDS = new NewsBeforeDataSource(_latestNewsService, _latestDate);
                     }
 
                     this.LatestNews = latest;
@@ -199,7 +216,5 @@ namespace zhihuDaily.ViewModel
             }
 
         }
-
-
     }
 }

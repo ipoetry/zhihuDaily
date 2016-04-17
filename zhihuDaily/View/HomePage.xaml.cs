@@ -1,9 +1,9 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using zhihuDaily.DataService;
 using zhihuDaily.Model;
@@ -51,7 +51,6 @@ namespace zhihuDaily
             // this event is handled for you.
 
             this.btn_LightModeSwitch.DataContext =AppSettings.Instance; //设置开关的datacontext
-            Functions.SetTheme(this.grid_Content);
             //Messenger.Default.Register<NotificationMessage>(this, (msg) =>
             //{
             //    switch (msg.Notification)
@@ -83,7 +82,9 @@ namespace zhihuDaily
 
         private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
-            Functions.btn_NightMode_Click(this.grid_Content);
+            Functions.SwitchTheme();
+            ViewModel.ViewModelLocator.HomePage.AppTheme = AppSettings.Instance.CurrentTheme;
+            ViewModel.ViewModelLocator.AppShell.AppTheme = AppSettings.Instance.CurrentTheme;
         }
 
         private void flipView_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
@@ -126,7 +127,7 @@ namespace zhihuDaily
 
         private void _scrollView_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
         {
-            if (_scrollView.VerticalOffset > 200)
+            if (_scrollView.VerticalOffset > 220)
             {
                 if (_itemsPanel != null)
                 {
@@ -160,12 +161,17 @@ namespace zhihuDaily
 
         private void newsList_ItemClick(object sender, ItemClickEventArgs e)
         {
-            List<string> currentList = new List<string>();
-            for (int i = 0; i < ViewModel.ViewModelLocator.HomePage.NewsDS.Count; i++)
+            var selectedStory = e.ClickedItem as Story;
+            if (selectedStory.IsStoryItemDisplay==Visibility.Visible)
             {
-                currentList.Add(ViewModel.ViewModelLocator.HomePage.NewsDS[i].Id.ToString());
+                List<string> currentList = new List<string>();
+                for (int i = 0; i < ViewModel.ViewModelLocator.HomePage.NewsDS.Count; i++)
+                {
+                    currentList.Add(ViewModel.ViewModelLocator.HomePage.NewsDS[i].Id.ToString());
+                }
+                Frame.Navigate(typeof(NewsContentPage), new NavigationArgs { CurrentList = currentList, ClickItem = e.ClickedItem }, new SlideNavigationTransitionInfo()); 
             }
-            Frame.Navigate(typeof(NewsContentPage), new NavigationArgs { CurrentList = currentList, ClickItem = e.ClickedItem });
+           
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.UI.Xaml;
 using zhihuDaily.Model;
 
 namespace zhihuDaily.ViewModel
@@ -17,6 +18,7 @@ namespace zhihuDaily.ViewModel
 
         public NewsCollectionViewMode()
         {
+            AppTheme = AppSettings.Instance.CurrentTheme;
             this.ItemClickCommand = new RelayCommand<object>((e) =>
             {
                 Messenger.Default.Send(new NotificationMessage(e, "OnItemClick"));
@@ -34,6 +36,21 @@ namespace zhihuDaily.ViewModel
             {
                 isActive = value;
                 RaisePropertyChanged(() => IsActive);
+            }
+        }
+
+        private ElementTheme _appTheme;
+        public ElementTheme AppTheme
+        {
+            get
+            {
+                return _appTheme;
+            }
+
+            set
+            {
+                _appTheme = value;
+                RaisePropertyChanged(() => AppTheme);
             }
         }
 

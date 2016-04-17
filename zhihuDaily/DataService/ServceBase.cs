@@ -12,46 +12,6 @@ namespace zhihuDaily.DataService
     public class ServiceBase
     {
         private HttpClient httpClient;
-        /// <summary>
-        /// 第四版API
-        /// </summary>
-        //public string rootUrl= "http://news-at.zhihu.com/api/4";
-        /// <summary>
-        /// 获取启动图像，需要传入分辨率参数【320*432，480*728，720*1184，1080*1776】
-        /// </summary>
-        public static readonly string startImgUrl = "http://news-at.zhihu.com/api/4/start-image/{0}";
-        /// <summary>
-        /// 获取最新消息
-        /// </summary>
-        public static readonly string laestNewsUrl = "http://news-at.zhihu.com/api/4/news/latest";
-        /// <summary>
-        /// 获取消息内容和离线下载，传入消息ID
-        /// </summary>
-        public static readonly string newsContentUrl = "http://news-at.zhihu.com/api/4/news/{0}";
-        /// <summary>
-        /// 获取历史消息，需要传入时间参数【20150816】
-        /// </summary>
-        public static readonly string newsBeforeUrl = "http://news.at.zhihu.com/api/4/news/before/{0}";
-        /// <summary>
-        /// 获取新闻附加信息(赞数量，评论数量等)，传入消息ID
-        /// </summary>
-        public static readonly string storyExtraUrl = "http://news-at.zhihu.com/api/4/story-extra/{0}";
-        /// <summary>
-        /// 获取长评论，传入消息ID
-        /// </summary>
-        public static readonly string longCommentsUrl = "http://news-at.zhihu.com/api/4/story/{0}/long-comments";
-        /// <summary>
-        /// 获取长评论，传入消息ID
-        /// </summary>
-        public static readonly string shortCommentsUrl = "http://news-at.zhihu.com/api/4/story/{0}/short-comments";
-        /// <summary>
-        /// 获取所有主题
-        /// </summary>
-        public static readonly string themesUrl = "http://news-at.zhihu.com/api/4/themes";
-        /// <summary>
-        /// 获取主题内容，传入主题ID
-        /// </summary>
-        public static readonly string themeContentUrl = "http://news-at.zhihu.com/api/4/theme/{0}";
 
         /// <summary>
         /// 通用获取接口泛型方法

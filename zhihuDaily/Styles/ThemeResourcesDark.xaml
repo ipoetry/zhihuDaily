@@ -630,4 +630,11 @@
     <SolidColorBrush x:Key="SystemControlTrackSelectedBrush" Color="{ThemeResource AccentHighColor}" />
     <SolidColorBrush x:Key="SystemControlTrackUnselectedBrush" Color="{StaticResource BaseMidColor}" />
     <SolidColorBrush x:Key="SystemControlTrackUnselectedMidBrush" Color="{StaticResource BaseMediumMidColor}" />
+
+    <SolidColorBrush x:Key="PhoneBackGround" Color="#3b3b3b" />
+    <SolidColorBrush x:Key="ListviewItemBackGround" Color="#4b4b4b" />
+    <SolidColorBrush x:Key="ListviewItemBorderBackGround" Color="Black" />
+    <SolidColorBrush x:Key="TitleBackGround" Color="#222222" />
+    <SolidColorBrush x:Key="MenuBackGround" Color="#555555" />
+    <SolidColorBrush x:Key="MenuItemColor" Color="#c2c2c2" />
 </ResourceDictionary>
