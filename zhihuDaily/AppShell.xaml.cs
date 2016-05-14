@@ -51,7 +51,7 @@ namespace zhihuDaily
                 switch (msg.Notification)
                 {
                     case "NotificationPanelClosed":
-                        RootSplitView.IsPaneOpen = false;
+                        RootSplitView.IsSwipeablePaneOpen = false;
                         break;
                     default:
                         break;
@@ -89,28 +89,35 @@ namespace zhihuDaily
 
             if (this.AppFrame == null)
                 return;
-
-            // Check to see if this is the top-most page on the app back stack.
-            if (this.AppFrame.CanGoBack && !handled)
+            if (!RootSplitView.IsSwipeablePaneOpen)
             {
-                // If not, set the event to handled and go back to the previous page in the app.
-                handled = true;
-                this.AppFrame.GoBack();
-            }
-            else if (!this.AppFrame.CanGoBack && !handled)
-            {
-                if (canexit)
+                // Check to see if this is the top-most page on the app back stack.
+                if (this.AppFrame.CanGoBack && !handled)
                 {
-                    App.Current.Exit();
-                }
-                else
-                {
-                    canexit = true;
+                    // If not, set the event to handled and go back to the previous page in the app.
                     handled = true;
-                    AppExitToast toast = new AppExitToast("再按一次离开");
-                    toast.Completed += (o, ex) => { canexit = false; };
+                    this.AppFrame.GoBack();
+                }
+                else if (!this.AppFrame.CanGoBack && !handled)
+                {
+                    if (canexit)
+                    {
+                        App.Current.Exit();
+                    }
+                    else
+                    {
+                        canexit = true;
+                        handled = true;
+                        AppExitToast toast = new AppExitToast("再按一次离开");
+                        toast.Completed += (o, ex) => { canexit = false; };
+                    }
                 }
             }
+            else
+            {
+                RootSplitView.IsSwipeablePaneOpen = false;
+            }
+            handled = true;
         }
 
         /// <summary>
@@ -323,7 +330,7 @@ namespace zhihuDaily
                     return;
             }
             this.AppFrame.Navigate(typeof(NewsCollectionPage));
-            RootSplitView.IsPaneOpen = false;
+            RootSplitView.IsSwipeablePaneOpen = false;
         }
         OfflineNewsDownloader _offlineNewsDownloader;
         bool downloadStatus = false;
@@ -371,7 +378,7 @@ namespace zhihuDaily
             if (loginName.Text != "请登录")
             {
                 this.AppFrame.Navigate(typeof(View.UserInfoPage));
-                RootSplitView.IsPaneOpen = false;
+                RootSplitView.IsSwipeablePaneOpen = false;
             }
             else
             {

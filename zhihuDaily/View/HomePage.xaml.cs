@@ -7,6 +7,7 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using zhihuDaily.DataService;
 using zhihuDaily.Model;
+using zhihuDaily.View;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
 
@@ -172,6 +173,17 @@ namespace zhihuDaily
                 Frame.Navigate(typeof(NewsContentPage), new NavigationArgs { CurrentList = currentList, ClickItem = e.ClickedItem }, new SlideNavigationTransitionInfo()); 
             }
            
+        }
+
+        private async void messageBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (AppSettings.Instance.UserInfoJson == string.Empty)
+            {
+                await new Functions().SinaLogin();
+                if (AppSettings.Instance.UserInfoJson == string.Empty)
+                    return;
+            }
+            Frame.Navigate(typeof(NotificationPage));
         }
     }
 }

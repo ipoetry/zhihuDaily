@@ -125,4 +125,19 @@ namespace zhihuDaily.Model
 
         public Windows.UI.Xaml.Visibility IsStoryItemDisplay { get; set; } 
     }
+
+    [DataContract]
+    public class ShareObject
+    {
+        [DataMember(Name = "text")]
+        public string Text { get; set; }
+        [DataMember(Name = "service")]
+        public string Service { get; set; }
+        [DataMember(Name = "story_id")]
+        public int StoryId { get; set; }
+        [DataMember(Name = "include_screenshot")]
+        public bool IncludeScreenshot { get; set; }
+
+        public string ShareUrl { get; set; }
+    }
 }

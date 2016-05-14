@@ -26,7 +26,7 @@
             </local:PageHeader.HeaderContent>
         </local:PageHeader>-->
         <Grid Background="{ThemeResource TitleBackGround}" Height="48">
-            <RelativePanel Margin="48,14,5,0" VerticalAlignment="Center">
+            <RelativePanel Margin="48,10,5,0" VerticalAlignment="Center">
             <TextBlock  Foreground="White" x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" VerticalAlignment="Center" RelativePanel.AlignLeftWithPanel="True"  Text="写点评"/>
             <Button Background="Transparent"  RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" Margin="0,-8,0,0" Command="{Binding SendCommentCommand, Mode=OneWay}" CommandParameter="{Binding CommentContent}">
                 <Button.Content>

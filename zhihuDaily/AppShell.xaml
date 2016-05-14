@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:zhihuDaily" xmlns:effects="using:ShadowToolkit"
+    xmlns:controls="using:zhihuDaily.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" DataContext="{Binding AppShell, Source={StaticResource Locator}}"
@@ -36,7 +37,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="RootSplitView.DisplayMode" Value="CompactInline"/>
-                        <Setter Target="RootSplitView.IsPaneOpen" Value="True"/>
+                        <Setter Target="RootSplitView.IsSwipeablePaneOpen" Value="True"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState>
@@ -51,10 +52,10 @@
         </VisualStateManager.VisualStateGroups>
 
         <!-- Top-level navigation menu + app content -->
-        <SplitView x:Name="RootSplitView"
+            <controls:SwipeableSplitView x:Name="RootSplitView"
                    DisplayMode="Overlay"
                    OpenPaneLength="280"
-                   IsTabStop="False">
+                   IsTabStop="False" IsPanSelectorEnabled="False">
                 <SplitView.Pane >
                     <Grid  Background="{ThemeResource ListviewItemBackGround}">
                         <Grid.RowDefinitions>
@@ -146,14 +147,14 @@
                     </TransitionCollection>
                 </Frame.ContentTransitions>
             </Frame>
-        </SplitView>
+        </controls:SwipeableSplitView>
 
         <!-- Declared last to have it rendered above everything else, but it needs to be the first item in the tab sequence. -->
         <ToggleButton x:Name="TogglePaneButton"
                       TabIndex="1"
                       Foreground="White"
                       Style="{StaticResource SplitViewTogglePaneButtonStyle}"
-                      IsChecked="{Binding IsPaneOpen, ElementName=RootSplitView, Mode=TwoWay}"
+                      IsChecked="{Binding IsSwipeablePaneOpen, ElementName=RootSplitView, Mode=TwoWay}"
                       Unchecked="TogglePaneButton_UnChecked"
                       Checked="TogglePaneButton_Checked"
                       AutomationProperties.Name="Menu"

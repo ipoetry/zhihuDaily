@@ -6,6 +6,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Threading;
+using SocialShare.WeChat;
 
 namespace zhihuDaily
 {
@@ -24,6 +25,17 @@ namespace zhihuDaily
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            base.OnLaunched(e);
+            InitApp(e.Arguments);
+        }
+
+        private void HandleNotificationMessage(NotificationMessageAction<string> message)
+        {
+            message.Execute("Success (from App.xaml.cs)!");
+        }
+
+        private void InitApp(object args)
+        {
             AppShell shell = Window.Current.Content as AppShell;
 
             // Do not repeat app initialization when the Window already has content,
@@ -37,11 +49,6 @@ namespace zhihuDaily
                 shell.Language = Windows.Globalization.ApplicationLanguages.Languages[0];
 
                 shell.AppFrame.NavigationFailed += OnNavigationFailed;
-
-                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
-                {
-                    //TODO: Load state from previously suspended application
-                }
             }
 
             // Place our app shell in the current Window
@@ -51,7 +58,7 @@ namespace zhihuDaily
             {
                 // When the navigation stack isn't restored, navigate to the first page
                 // suppressing the initial entrance animation.
-                shell.AppFrame.Navigate(typeof(HomePage), e.Arguments, new Windows.UI.Xaml.Media.Animation.SuppressNavigationTransitionInfo());
+                shell.AppFrame.Navigate(typeof(HomePage), args, new Windows.UI.Xaml.Media.Animation.SuppressNavigationTransitionInfo());
             }
 
             // Ensure the current window is active
@@ -61,9 +68,15 @@ namespace zhihuDaily
             //Messenger.Default.Register<NotificationMessageAction<string>>(this,HandleNotificationMessage);
         }
 
-        private void HandleNotificationMessage(NotificationMessageAction<string> message)
+        /// <summary>
+        /// 文件唤醒
+        /// </summary>
+        /// <param name="args"></param>
+        protected override void OnFileActivated(FileActivatedEventArgs args)
         {
-            message.Execute("Success (from App.xaml.cs)!");
+            base.OnFileActivated(args);
+            InitApp(args);
+            new WeChatCallback().Handle(args as FileActivatedEventArgs);  //处理文件
         }
 
         /// <summary>

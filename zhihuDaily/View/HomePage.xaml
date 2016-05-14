@@ -9,7 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" x:Name="homePage" xmlns:effects="using:ShadowToolkit"
     DataContext="{Binding HomePage, Source={StaticResource Locator}}"
-    xmlns:Converter="using:zhihuDaily.Converters"
+    xmlns:Converter="using:zhihuDaily.Converters" NavigationCacheMode="Required"
     xmlns:pr="using:PullToRefresh.UWP" Loaded="Page_Loaded" RequestedTheme="{Binding AppTheme}">
 
     <Page.Resources>
@@ -178,7 +178,11 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <TextBlock Foreground="White" x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" VerticalAlignment="Center" Margin="48,0,0,0" Text="{Binding PageTitle}"/>
-            <Button Foreground="White" Background="Transparent" Grid.Column="1" HorizontalAlignment="Right"  x:Name="contextButton" FontWeight="Bold"   Content="· · ·" Width="48" Height="48">
+            <RelativePanel Grid.Column="1" HorizontalAlignment="Right">
+                <Button RelativePanel.LeftOf="contextButton" Name="messageBtn" Click="messageBtn_Click"  RelativePanel.AlignVerticalCenterWithPanel="True" Background="Transparent" Width="48" Height="48">
+                    <Image Source="ms-appx:///Assets/FunIcon/message.png"/>
+                </Button>
+                <Button RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" Foreground="White" Background="Transparent" VerticalAlignment="Center"  x:Name="contextButton" FontWeight="Bold"   Content="· · ·" Width="48" Height="48">
                 <Button.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutItem Name="btn_LightModeSwitch" Text="{Binding Converter={StaticResource LightModeConverter}, Path=CurrentTheme}" Click="MenuFlyoutItem_Click" ></MenuFlyoutItem>
@@ -186,6 +190,15 @@
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>
+            </RelativePanel>
+            <!--<Button Foreground="White" Background="Transparent" Grid.Column="1" HorizontalAlignment="Right"  x:Name="contextButton" FontWeight="Bold"   Content="· · ·" Width="48" Height="48">
+                <Button.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Name="btn_LightModeSwitch" Text="{Binding Converter={StaticResource LightModeConverter}, Path=CurrentTheme}" Click="MenuFlyoutItem_Click" ></MenuFlyoutItem>
+                        <MenuFlyoutItem Text="设置选项" Click="MenuFlyoutItem_Click_1"></MenuFlyoutItem>
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>-->
         </Grid>
        
         <Grid Name="grid_Content" Grid.Row="1" Background="{ThemeResource PhoneBackGround}" >

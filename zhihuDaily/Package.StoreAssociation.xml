@@ -361,8 +361,13 @@
     <MainPackageIdentityName>54420.wp</MainPackageIdentityName>
     <ReservedNames>
       <ReservedName>知乎日报wp</ReservedName>
+      <ReservedName>知乎日报 for windows</ReservedName>
+      <ReservedName>知乎日报(UWP)</ReservedName>
+      <ReservedName>知乎日报 for UWP</ReservedName>
     </ReservedNames>
   </ProductReservedInfo>
-  <AccountPackageIdentityNames />
+  <AccountPackageIdentityNames>
+    <MainPackageIdentityName>54420.forwin10</MainPackageIdentityName>
+  </AccountPackageIdentityNames>
   <PackageInfoList LandingUrl="https://dev.windows.com/dashboard/Application?appId=9NBLGGH5LJ9X" />
 </StoreAssociation>

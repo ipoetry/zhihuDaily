@@ -115,6 +115,8 @@
   <ItemGroup>
     <Compile Include="JsonConvertHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WeChat\WeChatCallback.cs" />
+    <Compile Include="WeChat\WeChatClient.cs" />
     <Compile Include="Weibo\Config.cs" />
     <Compile Include="Weibo\Model\TokenResult.cs" />
     <Compile Include="Weibo\Model\AppInfo.cs" />

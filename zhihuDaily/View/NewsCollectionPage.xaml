@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
-    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"  NavigationCacheMode="Required"
     mc:Ignorable="d" RequestedTheme="{Binding AppTheme}"
     xmlns:Converter="using:zhihuDaily.Converters">
 
@@ -64,7 +64,10 @@
         </Grid.RowDefinitions>
 
         <Grid Background="{ThemeResource TitleBackGround}" Height="48">
-            <TextBlock Foreground="White" x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" VerticalAlignment="Center" Margin="48,0,0,0" Text="{Binding CollectionPageTitle}"/>
+            <TextBlock Foreground="White" x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" VerticalAlignment="Center" Margin="48,0,0,0">
+                <Run Text="{Binding CollectionCount}"></Run>
+                <Run Text="条收藏"></Run>
+            </TextBlock>
         </Grid>
 
         <Grid Name="grid_Content" Grid.Row="1" Background="{ThemeResource PhoneBackGround}" >

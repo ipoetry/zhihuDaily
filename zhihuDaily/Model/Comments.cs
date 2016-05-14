@@ -21,7 +21,17 @@ namespace zhihuDaily.Model
         private string _author;
         [DataMember(Name = "author")]
         public string Author { get { return "//" + _author + " : "; } set { _author = value; } }
+
+        [DataMember(Name = "own")]
+        public bool Own { get; set; }
+        [DataMember(Name = "voted")]
+        public bool Voted { get; set; }
+        [DataMember(Name = "time")]
+        public int Time { get; set; }
+        [DataMember(Name = "likes")]
+        public int Likes { get; set; }
     }
+
     [DataContract]
     public class Comment:NotificationObject
     {

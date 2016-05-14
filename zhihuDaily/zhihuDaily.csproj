@@ -95,6 +95,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Content Include="Assets\Fonts\fontawesome-webfont.ttf" />
     <None Include="project.json" />
     <None Include="zhihuDaily_StoreKey.pfx" />
   </ItemGroup>
@@ -116,6 +117,10 @@
       <DependentUpon>MessagePopupWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OpenMenuFlyoutAction.cs" />
+    <Compile Include="Controls\SharePopupWindow.xaml.cs">
+      <DependentUpon>SharePopupWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SwipeableSplitView.cs" />
     <Compile Include="Controls\ToastBox.xaml.cs">
       <DependentUpon>ToastBox.xaml</DependentUpon>
     </Compile>
@@ -143,14 +148,23 @@
     <Compile Include="CacheHelper\ImageCache.cs" />
     <Compile Include="Converters\CacheImageValueConverter.cs" />
     <Compile Include="Model\CollectionNews.cs" />
+    <Compile Include="Model\Notification.cs" />
+    <Compile Include="Model\NotificationDetail.cs" />
     <Compile Include="Model\UserInfo.cs" />
     <Compile Include="ViewModel\CollectionsIncrementalLoading.cs" />
     <Compile Include="ViewModel\CommentDataSource.cs" />
     <Compile Include="ViewModel\CommentIncrementalLoading.cs" />
+    <Compile Include="ViewModel\EditSinaSharePageViewModel.cs" />
     <Compile Include="ViewModel\NewsCommentViewMode.cs" />
+    <Compile Include="ViewModel\NotificationDetailPageViewModel.cs" />
+    <Compile Include="ViewModel\NotificationPageViewModel.cs" />
+    <Compile Include="ViewModel\NotificationReplyPageViewModel.cs" />
     <Compile Include="ViewModel\PostCommentViewModel.cs" />
     <Compile Include="ViewModel\ThemeBeforeDataSource.cs" />
     <Compile Include="ViewModel\UserInfoViewModel.cs" />
+    <Compile Include="View\EditSinaShare.xaml.cs">
+      <DependentUpon>EditSinaShare.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\NewsCommentPage.xaml.cs">
       <DependentUpon>NewsCommentPage.xaml</DependentUpon>
     </Compile>
@@ -187,6 +201,15 @@
       <DependentUpon>NewsContentPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View\NotificationDetailPage.xaml.cs">
+      <DependentUpon>NotificationDetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NotificationPage.xaml.cs">
+      <DependentUpon>NotificationPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NotificationReplyPage.xaml.cs">
+      <DependentUpon>NotificationReplyPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\PostCommentPage.xaml.cs">
       <DependentUpon>PostCommentPage.xaml</DependentUpon>
     </Compile>
@@ -228,6 +251,11 @@
     <Content Include="Assets\FunIcon\daily.jpeg" />
     <Content Include="Assets\FunIcon\home_pic.png" />
     <Content Include="Assets\FunIcon\ic_logo.png" />
+    <Content Include="Assets\FunIcon\message.png" />
+    <Content Include="Assets\FunIcon\message_reply.png" />
+    <Content Include="Assets\FunIcon\message_reply_read.png" />
+    <Content Include="Assets\FunIcon\message_vote.png" />
+    <Content Include="Assets\FunIcon\message_vote_read.png" />
     <Content Include="Assets\FunIcon\praise.png" />
     <Content Include="Assets\FunIcon\praised.png" />
     <Content Include="Assets\FunIcon\profile_edit.png" />
@@ -260,7 +288,6 @@
     <Content Include="Assets\www\show_bottom_link.js" />
     <Content Include="Assets\www\template.html" />
     <Content Include="Assets\www\video.js" />
-    <Content Include="Assets\www\zepto.min.js" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
@@ -286,9 +313,21 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\SharePopupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ToastBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\EditSinaShare.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\NewsCommentPage.xaml">
       <SubType>Designer</SubType>
@@ -325,6 +364,18 @@
     <Page Include="Styles\ThemeResourcesLight.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\NotificationDetailPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NotificationPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NotificationReplyPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\PostCommentPage.xaml">
       <SubType>Designer</SubType>
@@ -366,6 +417,10 @@
     <ProjectReference Include="..\BackgroundTaskLibrary\BackgroundTaskLibrary.csproj">
       <Project>{510812ba-ccac-4e67-af99-dd653b601ada}</Project>
       <Name>BackgroundTaskLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExtendControls\ExtendControls.csproj">
+      <Project>{f6610979-dd82-4809-b453-ae05b1e2c2bc}</Project>
+      <Name>ExtendControls</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShadowToolkit\ShadowToolkit.csproj">
       <Project>{6284a5d9-6e0e-4538-8dd9-4eaf5b139452}</Project>

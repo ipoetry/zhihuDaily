@@ -11,7 +11,7 @@ namespace zhihuDaily.Model
     public class UserInfo: NotificationObject
     {
         [DataMember(Name = "access_token")]
-        public string AccessToken { get; set; } = "M3X1ANI4QKKDdNLjVR_d8w";
+        public string AccessToken { get; set; } = "09yVzh8uSKWyUdXWnvopIg";
 
         [DataMember(Name = "bound_services")]
         public string[] BoundServices { get; set; }

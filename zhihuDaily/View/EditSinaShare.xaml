@@ -1,0 +1,43 @@
+﻿<Page
+    x:Class="zhihuDaily.View.EditSinaShare"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:zhihuDaily.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Name="MainContainer" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Background="{ThemeResource TitleBackGround}" Height="48">
+            <RelativePanel Margin="48,10,5,0" VerticalAlignment="Center">
+                <TextBlock  Foreground="White" x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignLeftWithPanel="True"  Text="分享到新浪微博"/>
+                <Button Background="Transparent"  RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" Margin="0,-8,0,0" Command="{Binding SendShareCommand, Mode=OneWay}" CommandParameter="{Binding CommentContent}">
+                    <Button.Content>
+                        <Image Width="26" Height="26" Source="ms-appx:///Assets/FunIcon/comment_send.png" Stretch="UniformToFill" />
+                    </Button.Content>
+                </Button>
+            </RelativePanel>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel Margin="0" Orientation="Vertical" >
+                <TextBox BorderThickness="0" SelectionStart="{Binding SelectionStart}" Margin="0" Name="tbCommentConent" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding ShareObject.Text,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+
+                </TextBox>
+            </StackPanel>
+            <RelativePanel Grid.Row="1" Height="48" >
+                <TextBlock Text="已附加原文链接" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" Margin="20,0,0,0"></TextBlock>
+                <CheckBox RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" Name="createLongWeibo" IsChecked="{Binding ShareObject.IncludeScreenshot,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  Margin="0,0,20,0">生成长微博</CheckBox>
+            </RelativePanel>
+        </Grid>
+
+        <ProgressRing Grid.Row="1" Name="pr" Height="40" Width="40" IsActive="{Binding IsActive}"  />
+    </Grid>
+</Page>

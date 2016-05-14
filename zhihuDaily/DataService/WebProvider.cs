@@ -39,6 +39,7 @@ namespace zhihuDaily
                     }
                     httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {user.AccessToken}");
                 }
+                 
                 return instance;
             }
             else
@@ -63,15 +64,16 @@ namespace zhihuDaily
                     IMEI += random.Next(10);
                 }
 
-                httpClient = new HttpClient();
-                httpClient.DefaultRequestHeaders.Add("User-Agent", "ZhihuApi/1.0.0-beta (Linux; Android 4.2.2; GT-P5210 Build/samsung/GT-P5210/GT-P5210/JDQ39E/zh_CN) Google-HTTP-Java-Client/1.20.0 (gzip) Google-HTTP-Java-Client/1.20.0 (gzip)");
+                var filter = new HttpBaseProtocolFilter();
+                filter.CacheControl.ReadBehavior = HttpCacheReadBehavior.MostRecent;
+                httpClient = new HttpClient(filter);
+                httpClient.DefaultRequestHeaders.Add("User-Agent", "DailyApi/4 (Linux; Android 5.0.2; MI 2S Build/Xiaomi/aries/aries/LRX22G/zh_CN) Google-HTTP-Java-Client/1.20.0 (gzip) Google-HTTP-Java-Client/1.20.0 (gzip)");
                 httpClient.DefaultRequestHeaders.Add("x-api-version", "4");
-                httpClient.DefaultRequestHeaders.Add("x-app-version", "2.5.4");
-                httpClient.DefaultRequestHeaders.Add("x-os", "Android 4.2.2");
-                httpClient.DefaultRequestHeaders.Add("x-device", "GT-P5210");
+                httpClient.DefaultRequestHeaders.Add("x-app-version", "2.6.0");
+                httpClient.DefaultRequestHeaders.Add("x-os", "Android 5.0.2");
+                httpClient.DefaultRequestHeaders.Add("x-device", "MI 2S");
                 var easId = new Windows.Security.ExchangeActiveSyncProvisioning.EasClientDeviceInformation().Id;
                 httpClient.DefaultRequestHeaders.Add("x-uuid", easId.ToString());
-                
             }
         }
 
@@ -119,7 +121,7 @@ namespace zhihuDaily
                 HttpRequestMessage mSent = new HttpRequestMessage(HttpMethod.Post, new Uri(url));
                 mSent.Content = new HttpStringContent(body, UnicodeEncoding.Utf8, contentType);
                 HttpResponseMessage response = await httpClient.SendRequestAsync(mSent);
-                response.EnsureSuccessStatusCode();
+                //response.EnsureSuccessStatusCode();
                 
                 string result = await response.Content.ReadAsStringAsync();
                 System.Diagnostics.Debug.WriteLine("请求url[post]:" + url+" 结果："+result);

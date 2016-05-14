@@ -83,4 +83,24 @@ namespace zhihuDaily.Converters
             throw new NotImplementedException();
         }
     }
+
+    class NotificationTypeConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            int type = System.Convert.ToInt32(value);
+            string para = System.Convert.ToString(parameter);
+            if (type == 1)
+                return para=="des"?" 赞了你的点评：": "ms-appx:///Assets/FunIcon/message_vote.png";
+            else if (type == 2)
+                return para == "des" ? " 回复了你的点评：": "ms-appx:///Assets/FunIcon/message_reply.png";
+            else
+                return "";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

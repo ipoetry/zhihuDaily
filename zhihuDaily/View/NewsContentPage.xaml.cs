@@ -14,6 +14,10 @@ using Windows.UI.Xaml.Navigation;
 using zhihuDaily.DataService;
 using zhihuDaily.Model;
 using zhihuDaily.ViewModel;
+using SocialShare.WeChat;
+using System.IO;
+using Windows.Data.Json;
+using zhihuDaily.View;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
 
@@ -243,6 +247,64 @@ namespace zhihuDaily
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
+        {           
+            var shareWindow = new Controls.SharePopupWindow();
+            shareWindow.ShowWindow();
+            shareWindow.MoreShareClick += ShareWindow_MoreShareClick;
+            shareWindow.WeChatShareClick += ShareWindow_WeChatShareClick;
+            shareWindow.SinaShareClick += ShareWindow_SinaShareClick;
+        }
+
+        private void ShareWindow_SinaShareClick(object sender, RoutedEventArgs e)
+        {
+            ShareObject objShare = new ShareObject
+            {
+                Text = $"{title}（分享自 @知乎日报 App）",
+                Service = "sina",
+                StoryId = story.Id,
+                IncludeScreenshot = true,
+                ShareUrl = $" {shareUrl}?utm_campaign=in_app_share&utm_medium=Android&utm_source=Sina"
+            };
+
+            //string jsonShare = JsonConvertHelper.JsonSerializer(objShare);
+            //string resJson = await WebProvider.GetInstance().SendPostRequestAsync("https://news-at.zhihu.com/api/4/share", jsonShare, WebProvider.ContentType.ContentType3);
+            //if (string.IsNullOrEmpty(resJson))
+            //{
+            //    ToastPrompt.ShowToast("分享成功");
+            //}
+            //else
+            //{
+            //    try
+            //    {
+            //        var jsonObj = JsonObject.Parse(resJson);
+            //        double status = jsonObj["status"].GetNumber();
+            //        if (status > 0)
+            //            ToastPrompt.ShowToast(jsonObj["error_msg"].GetString());
+            //        //else
+            //        //ToastPrompt.ShowToast(jsonObj["debug_info"].GetString());
+            //    }
+            //    catch { }
+            //}
+            this.Frame.Navigate(typeof(EditSinaShare), new object[] { objShare });
+
+        }
+
+        private async void ShareWindow_WeChatShareClick(object sender, RoutedEventArgs e)
+        {
+            var cache = ImageCache.CreateInstance();
+            var uri = await cache.GetImageSourceFromUrlAsync(story.Images[0]);
+
+            var file = await StorageFile.GetFileFromApplicationUriAsync(uri);
+            using (var stream = await file.OpenReadAsync())
+            {
+                var pic = new byte[stream.Size];
+                await stream.AsStream().ReadAsync(pic, 0, pic.Length);
+                WeChatClient client = new WeChatClient();
+                client.ShareLink(shareUrl,title, $"{title}（分享自 @知乎日报 App）",pic);
+            }         
+        }
+
+        private void ShareWindow_MoreShareClick(object sender, RoutedEventArgs e)
         {
             DataTransferManager.ShowShareUI();
         }

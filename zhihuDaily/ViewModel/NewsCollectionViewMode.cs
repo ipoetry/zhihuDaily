@@ -54,14 +54,14 @@ namespace zhihuDaily.ViewModel
             }
         }
 
-        private string collectionPageTitle;
+        private int collectionCount;
 
-        public string CollectionPageTitle
+        public int CollectionCount
         {
-            get { return collectionPageTitle; }
+            get { return collectionCount; }
             set {
-                collectionPageTitle = value;
-                RaisePropertyChanged(()=> CollectionPageTitle);
+                collectionCount = value;
+                RaisePropertyChanged(()=> CollectionCount);
             }
         }
 
@@ -85,7 +85,7 @@ namespace zhihuDaily.ViewModel
             var collections = await _api.GetCollectionStories();
             if (collections != null)
             {
-                CollectionPageTitle = collections.Count +" 条收藏";
+                CollectionCount = collections.Count;
 
                 var collectionsIncrementalLoading = new CollectionsIncrementalLoading(collections.LastTime);
 
@@ -117,7 +117,7 @@ namespace zhihuDaily.ViewModel
         {
             if (CollectionStories != null)
             {
-                CollectionPageTitle = CollectionStories.Count + " 条收藏";
+                CollectionCount = CollectionCount-1;
             }
         }
     }

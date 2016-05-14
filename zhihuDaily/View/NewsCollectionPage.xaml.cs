@@ -22,7 +22,7 @@ namespace zhihuDaily
         NewsCollectionViewMode _viewModel;
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-
+            base.OnNavigatedTo(e);
             if (e.NavigationMode == NavigationMode.New)
             {
                 this.DataContext =_viewModel = new NewsCollectionViewMode();
